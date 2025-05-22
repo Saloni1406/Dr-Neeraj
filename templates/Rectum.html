@@ -1,0 +1,363 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rectum Cancer</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+ <style>
+/* .scroll-container {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+} */
+    /* @keyframes appear{
+      from{
+        opacity: 0;
+        scale: 0.5;
+      }
+      to{
+        opacity: 1;
+        scale:1;
+      }
+    } */
+    .block{
+      animation: appear linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .zoom-in {
+      transition: transform 0.2s ease-in-out;
+    }
+    .zoom-in:hover {
+      transform: scale(1.1);
+    }
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+    .underline-line {
+      width: 24px;
+      height: 2px;
+      background-color: #0c4a6e;
+    }
+    .book-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.dialog {
+  position: fixed;
+  margin-top: -85px;
+  margin-left: 450px;
+  margin-bottom: 300px;
+  width: 450px;
+  height: 300px;
+  /* background-color: rgba(160, 19, 19, 0.5); */
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+
+.dialog.show {
+  display: flex; /* Make sure display: flex is active when shown */
+}
+
+.dialog-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+
+  /* Ensure all input fields are clearly visible */
+  input, textarea {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  /* Fix for incorrect "text-Black" class */
+  .text-Black {
+    color: #000000;
+  }
+  .close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+nav {
+    position: sticky; top: 0;
+    background-color: white;
+    z-index: 9999;
+}
+div.scrollmenu {
+            background-color: white;
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+div.scrollmenu a {
+            display: inline-block;
+            color: Black;
+            text-align: center;
+            padding: 14px;
+            text-decoration: none;
+        }
+
+
+  </style>
+</head>
+<body class = "bg-white">
+  <nav class="flex items-center justify-between px-10 py-4 max-w-7xl mx-auto">
+   <div class="flex items-center space-x-2">
+    <img alt="logo" class="w-50 h-10" height="80" src="{%static 'Logo.png'%}" width="90"/>
+   </div>
+   <ul class="hidden md:flex space-x-20 text-m text-gray-1200 font-normal">
+    <li>
+     <a class="hover:text-blue-600 transition zoom-in" href="{% url 'home' %}">
+      Home
+     </a>
+    </li>
+    <li class = "nav-item">
+     <a class="hover:text-blue-600 transition zoom-in"  href="{% url 'about' %}">
+      About Us
+     </a>
+    </li>
+    <li>
+     <a class="text-blue-600 transition font-semibold" href="#Specialities">
+      Specialities
+     </a>
+    </li>
+    <li>
+        <a class="hover:text-blue-600 transition" href="/#Media">
+         Media Coverage
+        </a>
+       </li>
+    <li>
+     <a class="hover:text-blue-600 transition" href="#Contact">
+      Contact Us
+     </a>
+    </li>
+   </ul>
+   <button class="book-btn hidden md:inline-block bg-blue-600 text-white text-s font-semibold px-4 py-2 rounded hover:bg-blue-900 transition" type="button">
+    Book Appointment
+   </button>
+  </nav>
+ <div id="dialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close">&times;</span>
+            <form class="w-full max-w-lg"  method="Post" id = "contactform">
+              {% csrf_token %}
+              <div class="mb-5">
+                <label for="name" class="block text-Black text-lg font-semibold mb-1">
+                  Name <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="name"
+                  name = "name"
+                  type="text"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="email" class="block text-Black text-lg font-semibold mb-1">
+                  Email <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="email"
+                  name = "email"
+                  type="email"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="phone" class=" text-Black text-lg font-semibold mb-1">
+                  Phone Number <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="phone"
+                  name = "phone"
+                  type="tel"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label for="message" class=" text-Black text-lg font-semibold mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name = "message"
+                  rows="4"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold resize-y"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white font-semibold text-lg py-3 rounded-md hover:bg-blue-900 transition"
+              >
+                Book Appointment
+              </button>
+            </form>
+             {% if form_submitted %}
+<script>
+  document.getElementById("contactform").reset();
+</script>
+{% endif %}
+        </div>
+    </div>
+  {% include 'includes/scrollMenu.html' %}
+
+
+     <section class="bg-[#f0fbff] py-14 px-6" id = "About" >
+    <div class="mx-auto text-center mb-10">
+     <h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+         Rectum Cancer
+     </h2>
+     <!-- <div class="flex justify-center items-center my-4">
+  <img
+    alt="brain"
+    class="rounded-md w-full sm:w-[400px] object-cover"
+    height="400"
+    src="pancreas.jpg"
+    width="400"
+  />
+</div> -->
+
+    </div>
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 px-2 sm:px-0">
+  <div class="text-justify max-w-xl">
+      <p class="block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+The rectum and anal canal make up the last part of the large intestine and are 6 to 8 inches long.he anal canal ends at the anus (the opening of the large intestine to the outside of the body).
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Risk factors for colorectal cancer
+         <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+
+1. Having a family history of colon or rectal cancer in a first-degree relative (parent, sibling, or child).
+
+2. Having a personal history of cancer of the colon, rectum, or ovary.
+
+3. Having a personal history of high-risk adenomas (colorectal polyps that are 1 centimeter or larger in size or that have cells that look abnormal under a microscope).
+
+4. Having inherited changes in certain genes that increase the risk of familial adenomatous polyposis (FAP) or Lynch syndrome (hereditary nonpolyposis colorectal cancer).
+
+5. Having a personal history of chronic ulcerative colitis or Crohn’s disease for 8 years or more.
+
+6. Having three or more alcoholic drinks per day.
+
+7. Smoking cigarettes.
+
+8. Obesity.
+<br>
+</p>
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Signs of rectal cancer
+        <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+
+1. Blood (either bright red or very dark) in the stool.This is usually attributed to having chronic piles.
+<br>
+2. A change in bowel habits.
+<br>
+a. Diarrhea.
+<br>
+b. Constipation.
+<br>
+c. Feeling that the bowel does not empty completely.
+<br>
+d. Stools that are narrower or have a different shape than usual.
+<br>
+3. General abdominal discomfort (frequent gas pains, bloating, fullness, or cramps).
+<br>
+4. Change in appetite.
+<br>
+5. Weight loss for no known reason.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        SDiagnosis
+        <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+
+1. Physical examination including digital rectal examination.
+<br>
+2. Colonoscopy: A procedure to look inside the rectum and colon for polyps (small pieces of bulging tissue), abnormal areas, or cancer.
+<br>
+3. Biopsy & IHC: To confirm the diagnosis and to look for targetable mutations.
+<br>
+4. Microsatellite Instability (MSI): A laboratory test in which tumor tissue is checked for cells that may have a defect in genes involved in DNA repair. The findings may indicate whether or not the patient has a type of cancer linked to an inherited cancer syndrome such as HNPCC (also known as Lynch syndrome).
+<br>
+5. MRI (magnetic resonance imaging) or CT scan : will be taken of the abdominopelvic region to assess the extent and spread of the disease in the local area and the nodes.
+<br>
+6. PET Scan: It is a whole-body scan utilising a special dye like FDG that assesses the spread of disease throughout the body.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Treatment Options
+        <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+
+1. Surgery: Surgery is the most common treatment for all stages of rectal cancer.This includes the removal of the diseased part along with its draining nodes.It may also include making a colostomy [temporary or permanent] based upon the location of the tumor.
+<br>
+2. Radiation Therapy: Based upon the stage of tumor Radiotherapy is indicated either before or after surgery. Current protocols state that Radiotherapy in combination with chemotherapy should be done before surgery to facilitate good surgical excision.There are 2 protocols of radiation: Long course and short
+course. The discussion for a particular treatment is to be done with your treating oncologist.
+<br>
+3. For a pure anal canal cancer the treatment is usually with radiation therapy and concurrent chemotherapy.
+<br>
+4. Chemotherapy: The various chemotherapeutic drugs are used before and after surgery as per the treatment protocol. In a metastatic setting only chemotherapy is used for disease control.
+<br>
+</p>
+     </div>
+    </div>
+   </section>
+
+  {% include 'includes/footer.html' %}
+
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

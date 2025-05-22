@@ -1,0 +1,434 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Head and Neck Cancer</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+ <style>
+/* .scroll-container {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+} */
+    /* @keyframes appear{
+      from{
+        opacity: 0;
+        scale: 0.5;
+      }
+      to{
+        opacity: 1;
+        scale:1;
+      }
+    } */
+    .block{
+      animation: appear linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .zoom-in {
+      transition: transform 0.2s ease-in-out;
+    }
+    .zoom-in:hover {
+      transform: scale(1.1);
+    }
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+    .underline-line {
+      width: 24px;
+      height: 2px;
+      background-color: #0c4a6e;
+    }
+    .book-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.dialog {
+  position: fixed;
+  margin-top: -85px;
+  margin-left: 450px;
+  margin-bottom: 300px;
+  width: 450px;
+  height: 300px;
+  /* background-color: rgba(160, 19, 19, 0.5); */
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+
+.dialog.show {
+  display: flex; /* Make sure display: flex is active when shown */
+}
+
+.dialog-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+
+  /* Ensure all input fields are clearly visible */
+  input, textarea {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  /* Fix for incorrect "text-Black" class */
+  .text-Black {
+    color: #000000;
+  }
+  .close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+nav {
+    position: sticky; top: 0;
+    background-color: white;
+    z-index: 9999;
+}
+div.scrollmenu {
+            background-color: white;
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+div.scrollmenu a {
+            display: inline-block;
+            color: Black;
+            text-align: center;
+            padding: 14px;
+            text-decoration: none;
+        }
+
+
+  </style>
+</head>
+<body class = "bg-white">
+  <nav class="flex items-center justify-between px-10 py-4 max-w-7xl mx-auto">
+   <div class="flex items-center space-x-2">
+    <img alt="logo" class="w-50 h-10" height="80" src="{%static 'Logo.png'%}" width="90"/>
+   </div>
+   <ul class="hidden md:flex space-x-20 text-m text-gray-1200 font-normal">
+    <li>
+     <a class="hover:text-blue-600 transition zoom-in" href="{% url 'home' %}">
+      Home
+     </a>
+    </li>
+    <li class = "nav-item">
+     <a class="hover:text-blue-600 transition zoom-in"  href="{% url 'about' %}">
+      About Us
+     </a>
+    </li>
+    <li>
+     <a class="text-blue-600 transition font-semibold" href="#Specialities">
+      Specialities
+     </a>
+    </li>
+    <li>
+        <a class="hover:text-blue-600 transition" href="/#Media">
+         Media Coverage
+        </a>
+       </li>
+    <li>
+     <a class="hover:text-blue-600 transition" href="#Contact">
+      Contact Us
+     </a>
+    </li>
+   </ul>
+   <button class="book-btn hidden md:inline-block bg-blue-600 text-white text-s font-semibold px-4 py-2 rounded hover:bg-blue-900 transition" type="button">
+    Book Appointment
+   </button>
+  </nav>
+ <div id="dialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close">&times;</span>
+            <form class="w-full max-w-lg"  method="Post" id = "contactform">
+              {% csrf_token %}
+              <div class="mb-5">
+                <label for="name" class="block text-Black text-lg font-semibold mb-1">
+                  Name <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="name"
+                  name = "name"
+                  type="text"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="email" class="block text-Black text-lg font-semibold mb-1">
+                  Email <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="email"
+                  name = "email"
+                  type="email"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="phone" class=" text-Black text-lg font-semibold mb-1">
+                  Phone Number <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="phone"
+                  name = "phone"
+                  type="tel"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label for="message" class=" text-Black text-lg font-semibold mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name = "message"
+                  rows="4"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold resize-y"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white font-semibold text-lg py-3 rounded-md hover:bg-blue-900 transition"
+              >
+                Book Appointment
+              </button>
+            </form>
+             {% if form_submitted %}
+<script>
+  document.getElementById("contactform").reset();
+</script>
+{% endif %}
+        </div>
+    </div>
+   {% include 'includes/scrollMenu.html' %}
+
+     <section class="bg-[#f0fbff] py-14 px-6" id = "About" >
+    <div class="mx-auto text-center mb-10">
+     <h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+         Head and Neck Cancer
+     </h2>
+     <div class="flex justify-center items-center my-4">
+  <img
+    alt="brain"
+    class="rounded-md w-full sm:w-[400px] object-cover"
+    height="400"
+    src="{% static 'headandneck.png' %}"
+    width="400"
+  />
+</div>
+
+    </div>
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 px-2 sm:px-0">
+  <div class="text-justify max-w-xl">
+      <p class="block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+Head and neck region can be divided into many subsites and cancers arise from all of them.
+Commonly the region can be divided into:
+<br>
+1. Lips
+<br>
+2. Oral cavity including gums, buccal mucosa & oral tongue
+<br>
+3. Palate- Hard & soft<br>
+4. Oropharynx-Base of tongue & tonsils<br>
+5. Nasopharynx<br>
+6. Larynx or the breathing pipe which includes vocal cords<br>
+7. Hypopharynx or the region behind the larynx. It continues as Oesophagus or the food
+pipe.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+         Signs and symptoms of oral cancer
+         <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+1. A sore on the lip or in the mouth that does not heal.
+<br>
+2. A lump or thickening on the lips or gums or in the mouth.
+<br>
+3. A white or red patch on the gums, tongue, or lining of the mouth.
+<br>
+4. Bleeding, pain, or numbness in the lip or mouth.
+<br>
+5. Loose teeth or dentures that no longer fit well.
+<br>
+6. Trouble chewing or swallowing or moving the tongue or jaw.
+<br>
+7. Swelling of jaw.
+<br>
+8. Sore throat or feeling that something is caught in the throat.
+<br>
+9. Change in voice.
+<br>
+10. Nasopharyngeal cancers: A lump in the nose or neck;Trouble breathing or
+speaking; Nosebleeds; Trouble hearing; Pain or ringing in the ear; Headaches.
+<br>
+</p>
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Risk Factors for Head and Neck Cancers:
+        <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+1. Tobacco Consumption: It is considered as the single largest cause of all head and neck cancers worldwide. This includes both smoking and smokeless forms. Around 80-90% of head and neck cancers can be attributed to use of tobacco.
+<br>
+2. Alcohol Consumption: Is also associated with increased risk of cancers.
+<br>
+3. Viruses: Certain viruses are associated with cancers. Epstein Barr virus is linked to nasopharyngeal cancers. Human Papilloma Virus is associated with oropharyngeal cancer.
+<br>
+4. Trauma: Sustained trauma like sharp tooth or history of dental surgery is sometimes seen in patients with oral cancers.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Diagnosing an oral cancer
+        <br>
+     </h2>
+
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+1. Physical exam of the lips and oral cavity: An exam to check the lips and oral
+cavity for abnormal areas. The doctor will feel the entire inside of the mouth & the neck will be felt for swollen lymph nodes.
+<br>
+2. Endoscopy: An endoscope is inserted through the mouth and pharynx to look for
+abnormal areas and to take a biopsy.
+<br>
+3. Biopsy: The removal of cells or tissues so they can be viewed under a microscope by a pathologist.
+<br>
+4. MRI (magnetic resonance imaging) or CT scan : will be taken of the head and
+neck region to assess the extent and spread of the disease in the local area and the neck nodes.
+<br>
+5. PET Scan: It is a whole body scan utilising a special dye like FDG that assesses the spread of disease throughout the body.
+<br>
+</p>
+ <div class="flex justify-center items-center my-4">
+  <img
+    alt="brain"
+    class="rounded-md w-full sm:w-[400px] object-cover"
+    height="400"
+    src="{% static 'Braintumour2.png' %}"
+    width="400"
+  />
+</div>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Treatment of Head and neck cancers
+        <br>
+     </h2>
+     <p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+There are 3 main modalities by which treatment is undertaken.
+<br>
+1. Surgery: Surgery is undertaken mainly for oral cavity cancers. This includes wide local excision of the tumor with neck dissection followed by reconstruction of the area by a plastic surgeon.
+<br>
+2. Radiation Therapy: In cancers of oropharynx, larynx, nasopharynx and hypopharynx
+radiation therapy is preferred modality of treatment along with concurrent chemotherapy. Radiotherapy is given daily over a period of 6-7 weeks depending upon the stage of the cancer. It can be given after surgery also in oral cavity or larynx cancers to reduce the chances of recurrence depending upon the risk factors in histopathological report.
+<br>
+3. Chemotherapy: Chemotherapy uses drugs either via the bloodstream or orally to kill the cancer cells. It can be given before the surgery in large cancers to reduce their size or along with radiotherapy to cure the cancer. Chemotherapy alone is used in metastatic cancers.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Stereotactic Radiosurgery
+        <br>
+     </h2>
+     <p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+Stereotactic radiosurgery (SRS) uses many precisely focused radiation beams to treat
+tumors and other problems in the brain, neck, lungs, liver, spine and other parts of the
+body.
+It is not surgery in the traditional sense because there’s no incision. Instead, stereotactic
+radiosurgery uses 3D imaging to target high doses of radiation to the affected area with
+minimal impact on the surrounding healthy tissue.
+Like other forms of radiation, stereotactic radiosurgery works by damaging the DNA of
+the targeted cells.
+Stereotactic radiosurgery of the brain and spine is typically completed in a single
+session. Body radiosurgery is used to treat lung, liver, adrenal and other soft tissue
+tumors, and treatment typically involves multiple (three to five) sessions.
+<br>
+Different types of technology can be utilised to deliver the SRS treatments:
+<br>
+1. Linear accelerators(LINAC): These machines utilise highly conformal photon
+beams to target the tumor. LINAC machines are also known by the brand name
+of the manufacturer, such as CyberKnife and TrueBeam.<br>
+2. Gamma Knife machines use 192 or 201 small beams of gamma rays to target
+and treat cancerous and noncancerous brain abnormalities.<br>
+3. Proton beam therapy (charged particle radiosurgery) is the newest type of
+stereotactic radiosurgery and is available in only a few centers across the globe.<br>
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Indication Of SRS
+        <br>
+     </h2>
+
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+Around 50 years ago, stereotactic radiosurgery was pioneered as a less invasive and
+safer alternative to standard brain surgery (neurosurgery),Since then, the use of
+stereotactic radiosurgery has expanded widely to treat a variety of neurological and
+other conditions, including:
+<br>
+1. Malignant brain tumors including brain metastasis, Recurrent primary brain
+tumors like gliomas.
+<br>
+2. Benign Brain tumors like Meningiomas, Acoustic Schwannomas, Pituitary
+adenomas, Craniopharyngiomas, Arteriovenous Malformations (AVM),Skull base
+tumors like Chordomas, Paragangliomas. Although these tumors are not
+malignant they have a tendency to recur after primary surgery and hence may
+need treatment in upfront or recurrent settings.<br>
+3. Functional radiosurgery indications: These are not directed at a particular tumor
+but delivering high doses of radiation brings relief from the particular
+condition.Examples are Trigeminal neuralgia, Recurrent seizure disorder, tremors
+associated with certain disease like Parkinson’s and essential tremor.
+<br>
+      </p>
+     </div>
+    </div>
+   </section>
+
+  {% include 'includes/footer.html' %}
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

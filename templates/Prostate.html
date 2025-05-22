@@ -1,0 +1,340 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prostate Cancer</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+ <style>
+/* .scroll-container {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+} */
+    /* @keyframes appear{
+      from{
+        opacity: 0;
+        scale: 0.5;
+      }
+      to{
+        opacity: 1;
+        scale:1;
+      }
+    } */
+    .block{
+      animation: appear linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .zoom-in {
+      transition: transform 0.2s ease-in-out;
+    }
+    .zoom-in:hover {
+      transform: scale(1.1);
+    }
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+    .underline-line {
+      width: 24px;
+      height: 2px;
+      background-color: #0c4a6e;
+    }
+    .book-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.dialog {
+  position: fixed;
+  margin-top: -85px;
+  margin-left: 450px;
+  margin-bottom: 300px;
+  width: 450px;
+  height: 300px;
+  /* background-color: rgba(160, 19, 19, 0.5); */
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+
+.dialog.show {
+  display: flex; /* Make sure display: flex is active when shown */
+}
+
+.dialog-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+
+  /* Ensure all input fields are clearly visible */
+  input, textarea {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  /* Fix for incorrect "text-Black" class */
+  .text-Black {
+    color: #000000;
+  }
+  .close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+nav {
+    position: sticky; top: 0;
+    background-color: white;
+    z-index: 9999;
+}
+div.scrollmenu {
+            background-color: white;
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+div.scrollmenu a {
+            display: inline-block;
+            color: Black;
+            text-align: center;
+            padding: 14px;
+            text-decoration: none;
+        }
+
+
+  </style>
+</head>
+<body class = "bg-white">
+  <nav class="flex items-center justify-between px-10 py-4 max-w-7xl mx-auto">
+   <div class="flex items-center space-x-2">
+    <img alt="logo" class="w-50 h-10" height="80" src="{%static 'Logo.png'%}" width="90"/>
+   </div>
+   <ul class="hidden md:flex space-x-20 text-m text-gray-1200 font-normal">
+    <li>
+     <a class="hover:text-blue-600 transitionzoom-in" href="{% url 'home' %}">
+      Home
+     </a>
+    </li>
+    <li class = "nav-item">
+     <a class="hover:text-blue-600 transition zoom-in"  href="{% url 'about' %}">
+      About Us
+     </a>
+    </li>
+    <li>
+     <a class="text-blue-600 transition font-semibold" href="#Specialities">
+      Specialities
+     </a>
+    </li>
+    <li>
+        <a class="hover:text-blue-600 transition" href="/#Media">
+         Media Coverage
+        </a>
+       </li>
+    <li>
+     <a class="hover:text-blue-600 transition" href="#Contact">
+      Contact Us
+     </a>
+    </li>
+   </ul>
+   <button class="book-btn hidden md:inline-block bg-blue-600 text-white text-s font-semibold px-4 py-2 rounded hover:bg-blue-900 transition" type="button">
+    Book Appointment
+   </button>
+  </nav>
+ <div id="dialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close">&times;</span>
+           <form class="w-full max-w-lg"  method="Post" id = "contactform">
+              {% csrf_token %}
+              <div class="mb-5">
+                <label for="name" class="block text-Black text-lg font-semibold mb-1">
+                  Name <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="name"
+                  name = "name"
+                  type="text"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="email" class="block text-Black text-lg font-semibold mb-1">
+                  Email <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="email"
+                  name = "email"
+                  type="email"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="phone" class=" text-Black text-lg font-semibold mb-1">
+                  Phone Number <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="phone"
+                  name = "phone"
+                  type="tel"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label for="message" class=" text-Black text-lg font-semibold mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name = "message"
+                  rows="4"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold resize-y"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white font-semibold text-lg py-3 rounded-md hover:bg-blue-900 transition"
+              >
+                Book Appointment
+              </button>
+            </form>
+             {% if form_submitted %}
+<script>
+  document.getElementById("contactform").reset();
+</script>
+{% endif %}
+        </div>
+    </div>
+  {% include 'includes/scrollMenu.html' %}
+
+
+     <section class="bg-[#f0fbff] py-14 px-6" id = "About" >
+    <div class="mx-auto text-center mb-10">
+     <h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+         Prostate Cancer
+     </h2>
+     <div class="flex justify-center items-center my-4">
+  <img
+    alt="brain"
+    class="rounded-md w-full sm:w-[400px] object-cover"
+    height="400"
+    src="{% static 'ProstateCancer.png' %}"
+    width="400"
+  />
+</div>
+
+    </div>
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 px-2 sm:px-0">
+  <div class="text-justify max-w-xl">
+      <p class="block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+The prostate is a gland in the male reproductive system. It lies just below the bladder. It is about the size of a walnut and surrounds part of the urethra (the tube that empties urine from the bladder). The prostate gland makes fluid that is part of the semen.
+<br>
+Symptoms of Prostate Cancer
+
+<br>
+1. Trouble starting the flow of urine.
+<br>
+2. Frequent urination (especially at night).
+<br>
+3. Trouble emptying the bladder completely.
+<br>
+4. Weak or interrupted (“stop-and-go”) flow of urine.
+<br>
+When prostate cancer is detected in an advanced stage, symptoms may include:
+<br>
+1. Pain in the back, hips, or pelvis that doesn’t go away.
+<br>
+2. Shortness of breath, feeling very tired, fast heartbeat, dizziness, or pale skin
+caused by anemia.<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+         Diagnoses 
+         <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+1. Digital rectal exam (DRE): An exam of the rectum. The doctor or nurse inserts a lubricated, gloved finger into the rectum and feels the prostate through the rectal wall for lumps or abnormal areas.
+<br>
+2. Prostate Specific Antigen [PSA]: test that measures the level of PSA in the blood. PSA is a substance made by the prostate that may be found in higher than normal amounts in the blood of men who have prostate cancer.
+<br>
+3. Biopsy: Tissue is taken from the prostate to confirm the diagnosis. It can be done by a transrectal ultrasound guided needle. If cancer is found, the pathologist will give the cancer a grade which is called the Gleason score.
+<br>
+4. PSMA PET CT scan: An imaging procedure that is used to help find prostate cancer cells that have spread outside of the prostate, into bone, lymph nodes, or other organs. It is a whole-body scan.
+<br>
+</p>
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Prostate Cancer Screening
+        <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+
+Tests are used to screen for different types of cancer when a person does not have symptoms. Regular testing of serum PSA can be done in old aged males to detect prostate cancers. If a PSA test is higher than normal, a biopsy of the prostate may be done.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+       Treatment Options
+        <br>
+     </h2>
+
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+1. Watchful waiting or active surveillance: Watchful waiting and active surveillance are treatments used for older men who do not have signs or symptoms or have other medical conditions and for men whose prostate cancer is found during a screening test.
+<br>
+2. Surgery: A complete removal of the prostate along with associated lymph nodes is undertaken in local/ locoregional confined tumors. This is called Radical Prostatectomy.
+<br>
+Transurethral Resection Of Prostate [TURP]: A surgical procedure to remove tissue from the prostate using a resectoscope (a thin, lighted tube with a cutting tool) inserted through the urethra. This procedure is done to treat benign prostatic hypertrophy and it is sometimes done to relieve symptoms caused by a tumor before other cancer treatment is given.
+<br>
+3. Radiation Therapy: Radiation therapy is a cancer treatment that uses high-energy x-rays or other types of radiation to kill cancer cells or keep them from growing.It is a tumor-directed therapy that is given to prostate ± lymph nodes to completely kill the tumor cells. It is done in the following ways:
+<br>
+SBRT: radiation treatment in which a larger than usual total dose of radiation is given once a day over a shorter period of time (5 days usually) compared to standard radiation therapy. It can be carried safely in low and intermediate-risk category patients.
+<br>
+Conventional Radiation: Regular protocols give radiation over a period of 4-5 weeks. The patient has to come daily for the treatment. Utilisation of treatment techniques like IMRT or IGRT can give highly conformal treatment with minimal side effects.
+<br>
+Post-op Radiotherapy: Radiotherapy can be required even after surgery based on high risk features defined in histopathology report.The treatment when indicated has to be given after discussion with the treating surgeon and radiation oncologist.
+<br>
+Internal radiation therapy: uses a radioactive substance sealed in needles, seeds, wires, or catheters that are placed directly into or near the cancer. In early-stage prostate cancer, the radioactive seeds are placed in the prostate using needles that are inserted through the skin between the scrotum and rectum.
+<br>
+4. Hormone Therapy and Chemotherapy: In prostate cancer, male sex hormones can cause prostate cancer to grow. Drugs, surgery, or other hormones are used to reduce the amount of male hormones or block them from working. This is called androgen deprivation therapy (ADT). Also in metastatic cancers chemotherapy may need to be given to control the disease.<br>
+</p>
+     </div>
+    </div>
+   </section>
+
+   {% include 'includes/footer.html' %}
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,376 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lung Cancer</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+ <style>
+/* .scroll-container {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+} */
+    /* @keyframes appear{
+      from{
+        opacity: 0;
+        scale: 0.5;
+      }
+      to{
+        opacity: 1;
+        scale:1;
+      }
+    } */
+    .block{
+      animation: appear linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .zoom-in {
+      transition: transform 0.2s ease-in-out;
+    }
+    .zoom-in:hover {
+      transform: scale(1.1);
+    }
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+    .underline-line {
+      width: 24px;
+      height: 2px;
+      background-color: #0c4a6e;
+    }
+    .book-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.dialog {
+  position: fixed;
+  margin-top: -85px;
+  margin-left: 450px;
+  margin-bottom: 300px;
+  width: 450px;
+  height: 300px;
+  /* background-color: rgba(160, 19, 19, 0.5); */
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+
+.dialog.show {
+  display: flex; /* Make sure display: flex is active when shown */
+}
+
+.dialog-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+
+  /* Ensure all input fields are clearly visible */
+  input, textarea {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  /* Fix for incorrect "text-Black" class */
+  .text-Black {
+    color: #000000;
+  }
+  .close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+nav {
+    position: sticky; top: 0;
+    background-color: white;
+    z-index: 9999;
+}
+div.scrollmenu {
+            background-color: white;
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+div.scrollmenu a {
+            display: inline-block;
+            color: Black;
+            text-align: center;
+            padding: 14px;
+            text-decoration: none;
+        }
+
+
+  </style>
+</head>
+<body class = "bg-white">
+  <nav class="flex items-center justify-between px-10 py-4 max-w-7xl mx-auto">
+   <div class="flex items-center space-x-2">
+    <img alt="logo" class="w-50 h-10" height="80" src="{%static 'Logo.png'%}" width="90"/>
+   </div>
+   <ul class="hidden md:flex space-x-20 text-m text-gray-1200 font-normal">
+    <li>
+     <a class="hover:text-blue-600 transition zoom-in" href="{% url 'home' %}">
+      Home
+     </a>
+    </li>
+    <li class = "nav-item">
+     <a class="hover:text-blue-600 transition zoom-in"  href="{% url 'about' %}">
+      About Us
+     </a>
+    </li>
+    <li>
+     <a class="text-blue-600 transition font-semibold" href="#Specialities">
+      Specialities
+     </a>
+    </li>
+    <li>
+        <a class="hover:text-blue-600 transition" href="/#Media">
+         Media Coverage
+        </a>
+       </li>
+    <li>
+     <a class="hover:text-blue-600 transition" href="#Contact">
+      Contact Us
+     </a>
+    </li>
+   </ul>
+   <button class="book-btn hidden md:inline-block bg-blue-600 text-white text-s font-semibold px-4 py-2 rounded hover:bg-blue-900 transition" type="button">
+    Book Appointment
+   </button>
+  </nav>
+ <div id="dialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close">&times;</span>
+            <form class="w-full max-w-lg"  method="Post" id = "contactform">
+              {% csrf_token %}
+              <div class="mb-5">
+                <label for="name" class="block text-Black text-lg font-semibold mb-1">
+                  Name <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="name"
+                  name = "name"
+                  type="text"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="email" class="block text-Black text-lg font-semibold mb-1">
+                  Email <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="email"
+                  name = "email"
+                  type="email"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="phone" class=" text-Black text-lg font-semibold mb-1">
+                  Phone Number <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="phone"
+                  name = "phone"
+                  type="tel"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label for="message" class=" text-Black text-lg font-semibold mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name = "message"
+                  rows="4"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold resize-y"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white font-semibold text-lg py-3 rounded-md hover:bg-blue-900 transition"
+              >
+                Book Appointment
+              </button>
+            </form>
+             {% if form_submitted %}
+<script>
+  document.getElementById("contactform").reset();
+</script>
+{% endif %}
+        </div>
+    </div>
+   {% include 'includes/scrollMenu.html' %}
+
+     <section class="bg-[#f0fbff] py-14 px-6" id = "About" >
+    <div class="mx-auto text-center mb-10">
+     <h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+        Lung Cancer
+     </h2>
+     <div class="flex justify-center items-center my-4">
+  <img
+    alt="brain"
+    class="rounded-md w-full sm:w-[400px] object-cover"
+    height="400"
+    src="{% static 'lungcancer.jpg' %}"
+    width="400"
+  />
+</div>
+
+    </div>
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 px-2 sm:px-0">
+  <div class="text-justify max-w-xl">
+      <p class="block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+Cancers arising from the cells in lungs are called Lung cancers. There are many types of cancers that arise from lung tissue.They are broadly classified as:
+
+1. Non Small Cell Lung Cancer
+2. Small Cell Lung Cancer.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+         Risk Factors:
+         <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+1. Smoking Tobacco: Smoking in any form like beedi, cigarettes, pipes, or cigars, now or in the past. This is the most important risk factor for lung cancer. The earlier in life a person starts smoking, the more often a person smokes, and the more years a person smokes, the greater the risk of lung cancer.
+
+2. Passive Smoking: This also considerably increases the risk of cancer as compared
+to non smokers.
+
+3. Air Pollution
+
+4. Certain occupations which involve asbestos, arsenic, chromium, beryllium, nickel, soot, or tar in the workplace also have higher risk of cancer lung.
+
+5. Radiation exposure to chest in the past due to treatment, or any other cause.<br>
+</p>
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Signs and Symptoms:
+        <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+Lung cancers are often detected after they have metastasized to other parts of the body.
+Symptoms at presentation can vary and depend upon:
+
+1- Lung presentation: Chest discomfort or pain.
+ a- A cough that doesn’t go away or gets worse over time.
+ b- Trouble breathing.
+ c- Wheezing.
+ d- Blood in sputum (mucus coughed up from the lungs).
+ e- Hoarseness.
+ f- Loss of appetite.
+ g- Weight loss for no known reason.
+ h- Feeling very tired.
+ i- Trouble swallowing.
+ j- Swelling in the face and/or veins in the neck.
+
+2- Metastatic presentation: Depends upon the involved site that causes symptoms:
+ a- Bone mets- Pain or symptoms of lower limb paralysis
+ b- Brain mets- Headache, vomiting, seizures, sudden episode of unconsciousness.
+ c- Liver mets- Jaundice, fluid in abdominal cavity.
+ d- Pleural mets- Fluid in lung space causing breathlessness. And so on.<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Diagnoses 
+        <br>
+     </h2>
+
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+Some of the following tests and procedures may be used:
+1. Laboratory tests: Medical procedures that test samples of tissue, blood, urine, or other substances in the body.
+
+2. Chest X ray: It can detect an abnormal area in lungs.
+
+3. CT scan or MRI scan: Can be done of the thorax region to delineate the local extent and the regional spread of the tumor.
+
+4. Tissue sampling: A representative tissue sample is required to confirm the diagnoses.
+
+This tissue can be obtained by multiple means like-
+
+  ● CT guided biopsy: CT scan is used to locate the abnormal tissue or fluid in the
+lung. A small incision may be made in the skin where the biopsy needle is
+inserted into the abnormal tissue or fluid. A sample is removed with the needle
+and sent to the laboratory.
+  ● Bronchoscopy: A bronchoscope is inserted through the nose or mouth into the
+trachea and lungs.A tissue is obtained and sent to pathology.
+
+5. Pathology Testing: May include running Immunohistochemistry tests (IHC), molecular studies including NGS panel to evaluate presence of certain targettable mutations.
+
+6. PET scan: It is a whole body scan utilising a special dye like FDG that assesses the spread of disease throughout the body.
+<br>
+</p>
+ 
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Treatment options
+        <br>
+     </h2>
+     <p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+1. Surgery: It is utilised mostly in early stages. Many different types of procedures can be undertaken to remove the cancer tissue from the body.
+
+2. Radiation Therapy: Is utilised for the treatment of early and locally advanced ( non metastatic) cases of lung cancer with curative intent. It can be given as
+
+  a- Stereotactic Radiosurgery– For stage I & II tumors (< 5cm in maximum dimension) with no nodal involvement. Very high doses of radiation are given in 3-10 days to achieve a cure.
+
+  b- Conventional radiation- For stage III tumors radiation is given along with
+chemotherapy to achieve cure of the cancer.
+
+  c- Palliative Radiation- Many times radiation is used to effect symptomatic relief
+like in bony pain , brain mets, etc. Short courses of radiation are given over 5-10
+days to achieve this.
+
+3. Chemotherapy/ Targeted therapy/ Immunotherapy- Utilisation of drugs to achieve disease control. These drugs can be given through blood stream or orally.<br>
+</p>
+
+
+     </div>
+    </div>
+   </section>
+
+   {% include 'includes/footer.html' %}
+
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

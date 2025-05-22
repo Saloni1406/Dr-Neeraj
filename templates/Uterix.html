@@ -1,0 +1,347 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uterus and Cervix Cancer</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+ <style>
+/* .scroll-container {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+} */
+    /* @keyframes appear{
+      from{
+        opacity: 0;
+        scale: 0.5;
+      }
+      to{
+        opacity: 1;
+        scale:1;
+      }
+    } */
+    .block{
+      animation: appear linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .zoom-in {
+      transition: transform 0.2s ease-in-out;
+    }
+    .zoom-in:hover {
+      transform: scale(1.1);
+    }
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+    .underline-line {
+      width: 24px;
+      height: 2px;
+      background-color: #0c4a6e;
+    }
+    .book-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.dialog {
+  position: fixed;
+  margin-top: -85px;
+  margin-left: 450px;
+  margin-bottom: 300px;
+  width: 450px;
+  height: 300px;
+  /* background-color: rgba(160, 19, 19, 0.5); */
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+
+.dialog.show {
+  display: flex; /* Make sure display: flex is active when shown */
+}
+
+.dialog-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+
+  /* Ensure all input fields are clearly visible */
+  input, textarea {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  /* Fix for incorrect "text-Black" class */
+  .text-Black {
+    color: #000000;
+  }
+  .close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+nav {
+    position: sticky; top: 0;
+    background-color: white;
+    z-index: 9999;
+}
+div.scrollmenu {
+            background-color: white;
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+div.scrollmenu a {
+            display: inline-block;
+            color: Black;
+            text-align: center;
+            padding: 14px;
+            text-decoration: none;
+        }
+
+
+  </style>
+</head>
+<body class = "bg-white">
+  <nav class="flex items-center justify-between px-10 py-4 max-w-7xl mx-auto">
+   <div class="flex items-center space-x-2">
+    <img alt="logo" class="w-50 h-10" height="80" src="{%static 'Logo.png'%}" width="90"/>
+   </div>
+   <ul class="hidden md:flex space-x-20 text-m text-gray-1200 font-normal">
+    <li>
+     <a class="hover:text-blue-600 transition zoom-in" href="{% url 'home' %}">
+      Home
+     </a>
+    </li>
+    <li class = "nav-item">
+     <a class="hover:text-blue-600 transition zoom-in"  href="{% url 'about' %}">
+      About Us
+     </a>
+    </li>
+    <li>
+     <a class="text-blue-600 transition font-semibold" href="#Specialities">
+      Specialities
+     </a>
+    </li>
+    <li>
+        <a class="hover:text-blue-600 transition" href="/#Media">
+         Media Coverage
+        </a>
+       </li>
+    <li>
+     <a class="hover:text-blue-600 transition" href="#Contact">
+      Contact Us
+     </a>
+    </li>
+   </ul>
+   <button class="book-btn hidden md:inline-block bg-blue-600 text-white text-s font-semibold px-4 py-2 rounded hover:bg-blue-900 transition" type="button">
+    Book Appointment
+   </button>
+  </nav>
+ <div id="dialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close">&times;</span>
+            <form class="w-full max-w-lg"  method="Post" id = "contactform">
+              {% csrf_token %}
+              <div class="mb-5">
+                <label for="name" class="block text-Black text-lg font-semibold mb-1">
+                  Name <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="name"
+                  name = "name"
+                  type="text"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="email" class="block text-Black text-lg font-semibold mb-1">
+                  Email <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="email"
+                  name = "email"
+                  type="email"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="phone" class=" text-Black text-lg font-semibold mb-1">
+                  Phone Number <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="phone"
+                  name = "phone"
+                  type="tel"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label for="message" class=" text-Black text-lg font-semibold mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name = "message"
+                  rows="4"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold resize-y"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white font-semibold text-lg py-3 rounded-md hover:bg-blue-900 transition"
+              >
+                Book Appointment
+              </button>
+            </form>
+             {% if form_submitted %}
+<script>
+  document.getElementById("contactform").reset();
+</script>
+{% endif %}
+        </div>
+    </div>
+  {% include 'includes/scrollMenu.html' %}
+
+     <section class="bg-[#f0fbff] py-14 px-6" id = "About" >
+    <div class="mx-auto text-center mb-10">
+     <h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+         Uterus and Cervix Cancer
+     </h2>
+     <div class="flex justify-center items-center my-4">
+  <img
+    alt="brain"
+    class="rounded-md w-full sm:w-[400px] object-cover"
+    height="400"
+    src="{% static 'ultreix.png' %}"
+    width="400"
+  />
+</div>
+
+    </div>
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 px-2 sm:px-0">
+  <div class="text-justify max-w-xl">
+      <p class="block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+Uterus and cervix cancer are types of gynecologic cancers affecting the female reproductive system. Uterine cancer usually starts in the endometrium, while cervical cancer begins in the cervix, often due to HPV infection. Early detection through screening and awareness greatly improves treatment success and survival rates for both cancers.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+         Risk Factors 
+         <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+A. Endometrial Cancer:
+<br>
+  1.Taking estrogen-only hormone replacement therapy (HRT) after menopause.<br>
+  2.Taking tamoxifen to prevent or treat breast cancer.<br>
+  3.Obesity.<br>
+  4.Type 2 diabetes.<br>
+  5.A family history of endometrial cancer in a first-degree relative (mother, sister, or daughter).<br>
+  6.Having certain genetic conditions, such as Lynch syndrome.<br>
+<br>
+B. Cervical Cancer:<br>
+  1.Long-lasting (persistent) infection with high-risk types of human papillomavirus (HPV) causes virtually all cervical cancers.<br>
+  2.Socioeconomic Factors which include people from lower strata have been found to be more susceptible.<br>
+  3.Early initiation of sexual activity and bearing more children<br>
+  4.Weakened immune system due to disease like HIV or immunosuppressants have been 5-found to accelerate the disease process.<br>
+  5.Smoking.<br>
+<br>
+</p>
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Signs and Symptoms
+        <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+
+1. Vaginal bleeding or discharge not related to menstruation (periods).
+<br>
+2. Vaginal bleeding after menopause.
+<br>
+3. Difficult or painful urination.
+<br>
+4. Pain during sexual intercourse.
+<br>
+5. Pain in the pelvic area.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+       Screening and Prevention of Cervical Cancer
+        <br>
+     </h2>
+
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+1. Screening: 2 tests Pap Smear and HPV genetic testing can identify people having early stages of cancer. These screening tests are recommended for females from 30-65 years of age.
+<br>
+2. HPV vaccination: HPV vaccination is a safe and effective way to help prevent cervical cancer.The HPV vaccine offers the most protection when given before a person becomes sexually active. It is recommended for boys and girls between the ages of 9-25. HPV infection can also lead to other cancers in the genital the region, anal canal cancer & oropharyngeal cancers the vaccine is very useful in preventing a wide variety of cancers.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Treatment
+        <br>
+     </h2>
+     <p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+1. Surgery: Surgery is the standard of care in endometrial cancers and early stage cervical cancers.
+<br>
+2. Radiation Therapy: Is required in endometrial cancers in late stage I & Stages II & III after surgery. In Cervical cancers all stages can be treated along with concurrent chemotherapy and can completely cure the cancer.
+
+The 2 types of radiation therapy that are utilised are:
+<br>
+a. External Beam Radiotherapy– uses a machine outside the body to send radiation toward the area of the body with cancer.
+<br>
+b. Internal Radiation therapy/ Brachytherapy: Uses radiation sources kept in proximity to the tumor to deliver high doses of radiation to kill tumor cells. It is a surgical procedure and is performed under anesthesia.
+<br>
+3. Chemotherapy: Chemotherapy (also called chemo) uses drugs to stop the growth of cancer cells, either by killing the cells or by stopping them from dividing.
+<br>
+</p>
+
+     </div>
+    </div>
+   </section>
+
+   {% include 'includes/footer.html' %}
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

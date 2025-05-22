@@ -1,0 +1,660 @@
+{% load static %}
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>
+  Dr. Neeraj Dhingra
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+  <style>
+.scroll-container {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+}
+    @keyframes appear{
+      from{
+        opacity: 0;
+        scale: 0.5;
+      }
+      to{
+        opacity: 1;
+        scale:1;
+      }
+    }
+    .block{
+      animation: appear linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .zoom-in {
+      transition: transform 0.2s ease-in-out;
+    }
+    .zoom-in:hover {
+      transform: scale(1.1);
+    }
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+    .underline-line {
+      width: 24px;
+      height: 2px;
+      background-color: #0c4a6e;
+    }
+    .book-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.dialog {
+  position: fixed;
+  margin-top: 0;
+  margin-left: 450px;
+  margin-bottom: 450px;
+  width: 450px;
+  height: 300px;
+  /* background-color: rgba(160, 19, 19, 0.5); */
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+.dialog.show {
+  display: flex; /* Make sure display: flex is active when shown */
+}
+
+.dialog-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+
+  /* Ensure all input fields are clearly visible */
+  input, textarea {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  /* Fix for incorrect "text-Black" class */
+  .text-Black {
+    color: #000000;
+  }
+  .close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+nav {
+    position: sticky; top: 0;
+    background-color: white;
+    z-index: 9999;
+}
+  </style>
+ </head>
+ <body class="bg-white">
+  <nav class="flex items-center justify-between px-10 py-4 max-w-7xl mx-auto">
+   <div class="flex items-center space-x-2">
+    <img alt="logo" class="w-50 h-10" height="80" src="{%static 'Logo.png' %}" width="90"/>
+   </div>
+   <ul class="hidden md:flex space-x-20 text-m text-gray-1200 font-normal">
+    <li>
+     <a class="text-blue-600 font-semibold zoom-in" href="#">
+      Home
+     </a>
+    </li>
+    <li class = "nav-item">
+     <a class="hover:text-blue-600 transition zoom-in"  href="#About">
+      About Us
+     </a>
+    </li>
+    <li>
+     <a class="hover:text-blue-600 transition" href="#Specialities">
+      Specialities
+     </a>
+    </li>
+    <li>
+        <a class="hover:text-blue-600 transition" href="#Media">
+         Media Coverage
+        </a>
+       </li>
+    <li>
+     <a class="hover:text-blue-600 transition" href="#Contact">
+      Contact Us
+     </a>
+    </li>
+   </ul>
+   <button class="book-btn hidden md:inline-block bg-blue-600 text-white text-s font-semibold px-4 py-2 rounded hover:bg-blue-900 transition" type="button">
+    Book Appointment
+   </button>
+  </nav>
+  <section class="relative w-full h-screen">
+    <img 
+      alt="Background" 
+      src="{%static 'Bg.jpg' %}" 
+      class="absolute inset-0 w-full h-full object-cover" 
+    />
+  
+    <div class="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-center items-start px-6 py-12">
+      <h1 class="text-white text-5xl md:text-5xl font-extrabold leading-tight max-w-3xl">
+        Dr. Neeraj Dhingra
+      </h1>
+      <h2 class="text-white text-4xl md:text-4xl font-extrabold leading-tight max-w-3xl">
+        (MBBS, MD, DNB)
+      </h2>
+      <p class="text-white text-xl mt-3 max-w-2xl font-semibold">
+        Consultant Radiation Oncologist
+      </p>
+      <button class="book-btn mt-6 bg-blue-600 text-white text-xl font-semibold px-4 py-2 rounded hover:bg-blue-900 transition " type="button" >
+        Book An Appointment
+      </button>
+      <div id="dialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close">&times;</span>
+            <form class="w-full max-w-lg"  method="Post" id = "contactform">
+              {% csrf_token %}
+              <div class="mb-5">
+                <label for="name" class="block text-Black text-lg font-semibold mb-1">
+                  Name <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="email" class="block text-Black text-lg font-semibold mb-1">
+                  Email <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="phone" class=" text-Black text-lg font-semibold mb-1">
+                  Phone Number <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label for="message" class=" text-Black text-lg font-semibold mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="4"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold resize-y"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white font-semibold text-lg py-3 rounded-md hover:bg-blue-900 transition"
+              >
+                Book Appointment
+              </button>
+            </form>
+            {% if form_submitted %}
+<script>
+  document.getElementById("contactform").reset();
+</script>
+{% endif %}
+        </div>
+    </div>
+      <div class="absolute bottom-0 left-0 right-0 px-8 pb-6">
+        <div class="border-t border-white pt-4 flex flex-col sm:flex-row justify-between text-white text-lg w-full">
+          <div class="flex items-center space-x-2">
+            <i class="fas fa-map-marker-alt text-s"></i>
+            <span>
+              1st Floor, Dr. Dhingra's Cancer Care Clinic, Vandana Plaza,<br>
+              Aakashganga Rd, opp. Park Royale, Shivraj Nagar, Rahatani,<br>
+              Pune, Pimpri-Chinchwad, Maharashtra 411017
+            </span>
+          </div>
+          <div class="flex items-center space-x-2 mt-4 sm:mt-0">
+            <i class="fas fa-phone-alt text-xs"></i>
+            <span>+91 95601 62485</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class = view>
+  <div class="max-w-7xl mx-auto px-6 py-10 sm:py-14">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-8xl mx-auto">
+     <div class=" block border border-slate-700/20 rounded-md p-6">
+      <div class="mb-2">
+       <div class="underline-line mb-2">
+       </div>
+       <h3 class="font-semibold text-slate-900 text-lg leading-tight">
+       Understanding Cancer
+       </h3>
+      </div>
+      <p class="text-base text-slate-700 leading-snug mb-3">
+        Cancer is a disease in which some of the body’s<br> 
+        cells grow uncontrollably and spread to other<br> 
+        parts of the body.
+      </p>
+     </div>
+     <div class="block border border-slate-700/20 rounded-md p-6">
+      <div class="mb-2">
+       <div class="underline-line mb-2">
+       </div>
+       <h3 class="font-semibold text-slate-900 text-lg leading-tight">
+        Understanding Radiotherapy
+       </h3>
+      </div>
+      <p class="text-base text-slate-700 leading-snug mb-3">
+        Radiation therapy, or radiotherapy, is the use of 
+        various forms of radiation like X rays to safely 
+        and effectively treat cancer and other diseases. 
+        Radiation therapy works by damaging the genetic 
+        material within cancer cells.
+      </p>
+      
+     </div>
+     <div class="block border border-slate-700/20 rounded-md p-6">
+      <div class="mb-2">
+       <div class="underline-line mb-2">
+       </div>
+       <h3 class="font-semibold text-slate-900 text-lg leading-tight">
+        Cancer Myths and Facts
+       </h3>
+      </div>
+      <p class="text-base text-slate-700 leading-snug mb-3">
+        Radiation therapy, or radiotherapy, is the use of various forms of radiation like 
+        X rays to safely and effectively treat cancer and other diseases. Radiation therapy 
+        works by damaging the genetic material within cancer cells.
+      </p>
+     </div>
+    </div>
+   </div>
+  </div>
+   <section class="bg-[#f0fbff] py-14 px-6" id = "About" >
+    <div class="mx-auto text-center mb-10">
+     <p class="text-xs text-slate-500 uppercase tracking-widest mb-2">
+      About Dr. Neeraj Dhingra
+     </p>
+     <h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+        Dr. Neeraj Dhingra: Consultant - CyberKnife RadioSurgery and Radiation Oncology
+    </div>
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-start gap-8 sm:gap-12 px-2 sm:px-0">
+     <img alt="Two surgeons wearing surgical masks and caps performing surgery under bright operating room lights" class="rounded-md w-full sm:w-[400px] object-cover" height="400" src="{%static 'Untitled_design-removebg-preview.png' %}" width="400"/>
+     <div class="text-justify max-w-xl">
+      <p class="block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+        Dr. Neeraj Dhingra is a leading oncologist in PCMC and Pune, known for his expertise in advanced cancer treatments and compassionate care. With qualifications including MBBS, MD, DNB, and DHM, he serves as a Consultant in CyberKnife Radiosurgery and Radiation Oncology at Ruby Hall Clinic. He specializes in using technologies like IMRT, IGRT, VMAT, and CyberKnife for precise, non-invasive tumor treatment. Actively involved in research, he has published widely and is a member of several professional organizations. His focus areas include brain, head and neck, thoracic, and genitourinary cancers, with an emphasis on stereotactic therapies.
+      </p>
+      <a class="inline-block text-blue-700 text-xs font-normal border border-blue-700 rounded px-3 py-1 hover:bg-blue-50 transition" href="{% url 'about' %}" target="_blank" rel="noopener noreferrer">
+       Read More
+      </a>
+     </div>
+    </div>
+   </section>
+   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16" id = "Specialities">
+    <p class="text-xs text-slate-500 uppercase text-center mb-2 tracking-wide font-medium">
+     PRIMARY CARE
+    </p>
+    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-8">
+     Dr. Neeraj's Specialities
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
+     <article class="block border border-slate-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <img alt="Breast Cancer" class="rounded-md mb-4 w-full object-cover h-48" height="240" src="{%static 'breast2.png' %}" width="400"/>
+      <h3 class="font-semibold text-slate-900 mb-1 text-sm sm:text-base">
+        Breast Cancer
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-600 mb-3 leading-relaxed">
+        Breast cancer occurs when cancerous tumours are found in the breasts of female or male patients.
+      </p>
+      <a class="text-blue-600 text-xs sm:text-sm font-medium flex items-center gap-1" href="{% url 'breast' %}">
+       Learn More
+       <i class="fas fa-arrow-right text-[10px]">
+       </i>
+      </a>
+     </article>
+     <article class="block border border-slate-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <img alt="Lung Cancer" class="rounded-md mb-4 w-full object-cover h-48" height="240" src="{%static 'lung.png' %}" width="400"/>
+      <h3 class="font-semibold text-slate-900 mb-1 text-sm sm:text-base">
+       Lung Cancer
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-600 mb-3 leading-relaxed">
+        lung cancer is related to cigarette smoking. Smoking causes nearly 9 out of 10 cases (86%).
+      </p>
+      <a class="text-blue-600 text-xs sm:text-sm font-medium flex items-center gap-1" href="{% url 'lung' %}">
+       Learn More
+       <i class="fas fa-arrow-right text-[10px]">
+       </i>
+      </a>
+     </article>
+     <article class="block border border-slate-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <img alt="brain tumor" class="rounded-md mb-4 w-full object-cover h-48" height="240" src="{%static 'brain2.png' %}" width="400"/>
+      <h3 class="font-semibold text-slate-900 mb-1 text-sm sm:text-base">
+        Brain Tumors
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-600 mb-3 leading-relaxed">
+        It's a mass in the brain which is caused when brain cells divide and grow in an uncontrolled way
+      </p>
+      <a class="text-blue-600 text-xs sm:text-sm font-medium flex items-center gap-1" href="{% url 'brain' %}">
+       Learn More
+       <i class="fas fa-arrow-right text-[10px]">
+       </i>
+      </a>
+     </article>
+     <article class="block border border-slate-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+        <img alt="Head and neck" class="rounded-md mb-4 w-full object-cover h-48" height="240" src="{%static 'head.png' %}" width="400"/>
+        <h3 class="font-semibold text-slate-900 mb-1 text-sm sm:text-base">
+          Head and Neck Cancer
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 mb-3 leading-relaxed">
+            Head and neck cancer involves the mouth (lip and tongue), throat, and voice box cancers
+        </p>
+        <a class="text-blue-600 text-xs sm:text-sm font-medium flex items-center gap-1" href="{% url 'head' %}">
+         Learn More
+         <i class="fas fa-arrow-right text-[10px]">
+         </i>
+        </a>
+       </article>
+       <article class="block border border-slate-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+        <img alt="Uterus" class="rounded-md mb-4 w-full object-cover h-48" height="240" src="{%static 'uterus.png' %}" width="400"/>
+        <h3 class="font-semibold text-slate-900 mb-1 text-sm sm:text-base">
+        Cervix and Uterus Cancer
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 mb-3 leading-relaxed">
+        Cancer can develop either inside the uterus which is called endometrial cancer or in the cervix which is called cervix cancer.
+        </p>
+        <a class="text-blue-600 text-xs sm:text-sm font-medium flex items-center gap-1" href="{% url 'uterus' %}">
+         Learn More
+         <i class="fas fa-arrow-right text-[10px]">
+         </i>
+        </a>
+       </article>
+       <article class="block border border-slate-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+        <img alt="Dentist working on patient in clinic wearing magnifying glasses and gloves" class="rounded-md mb-4 w-full object-cover h-48" height="240" src="https://storage.googleapis.com/a1aa/image/b0fc228b-d8ec-4143-ea5f-f8f6a43abd9a.jpg" width="400"/>
+        <h3 class="font-semibold text-slate-900 mb-1 text-sm sm:text-base">
+            Prostate Cancer
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 mb-3 leading-relaxed">
+            The prostate is a gland in the male reproductive system. It lies just below the bladder.
+        </p>
+        <a class="text-blue-600 text-xs sm:text-sm font-medium flex items-center gap-1" href="{% url 'prostate' %}">
+         Learn More
+         <i class="fas fa-arrow-right text-[10px]">
+         </i>
+        </a>
+       </article>
+    </div>
+   </section>
+   <section class="bg-blue-600">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+     <h3 class="text-white font-bold text-lg sm:text-xl max-w-xl text-center sm:text-left leading-tight">
+      Take the first step towards better health. Book your appointment now!
+     </h3>
+     <button class="book-btn border border-white text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded hover:bg-white hover:text-blue-600 transition-colors duration-300" href = "appointment.html">
+      Book An Appointment
+     </button>
+    </div>
+   </section>
+   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="bg-slate-100 rounded-lg p-6 sm:p-10 flex flex-col lg:flex-row items-center lg:items-start gap-10 lg:gap-16">
+     <div class="block max-w-xl lg:max-w-lg">
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mb-4">
+       Why Choose Dr. Neeraj Dhingra
+      </h2>
+      <p class="text-xs sm:text-sm text-slate-600 mb-6 leading-relaxed">
+       Dr. Dhingra’s specialization in cutting-edge techniques like CyberKnife Radiosurgery, IMRT, IGRT, and SRS/SBRT </p>
+      <div class="space-y-6 text-slate-700 text-xs sm:text-sm">
+       <div>
+        <h3 class="font-semibold mb-1 text-sm sm:text-base">
+         Advanced Treatment Expertise
+        </h3>
+        <p class="leading-relaxed">
+         Dr. Dhingra excels in CyberKnife Radiosurgery, IMRT, and SRS/SBRT for precise, effective cancer care with minimal side effects.
+         </p>
+        <hr class="border-slate-300 mt-4"/>
+       </div>
+       <div>
+        <h3 class="font-semibold mb-1 text-sm sm:text-base">
+         Personalized Care
+        </h3>
+        <p class="leading-relaxed">
+         He customizes treatment plans, focusing on patient needs to improve outcomes and quality of life
+        </p>
+        <hr class="border-slate-300 mt-4"/>
+       </div>
+       <div>
+        <h3 class="font-semibold mb-1 text-sm sm:text-base">
+         Continuous Learning
+        </h3>
+        <p class="leading-relaxed">
+         A researcher and AROI member, Dr. Dhingra stays updated with global oncology standards for the best patient care.
+        </p>
+       </div>
+      </div>
+     </div>
+     <div class="flex-shrink-0">
+      <img alt="choose" class="rounded-lg w-92 max-w-full object-cover" height="400" src="{%static 'choose.JPG' %}" width="400"/>
+     </div>
+    </div>
+   </section>
+   <section class="max-w-7xl mx-auto px-6 sm:px-10 md:px-16 py-12">
+    <p class="text-[10px] font-normal text-[#7a8a99] uppercase mb-1 tracking-wider">
+     Patient Stories
+    </p>
+    <h2 class="text-2xl sm:text-3xl font-semibold mb-8 leading-tight">
+     What Our Patient are Saying
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+     <!-- Card 1 -->
+     <div class="border border-[#0f3c4b] rounded-md p-5">
+      <div class="flex items-center mb-3">
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+      </div>
+      <p class="text-[11px] leading-[15px] text-[#0f3c4b] mb-6">
+        Would like to highly recommend Dr. Neeraj. Got my father treated under him for radiation therapy post his oral cancer and it was a best decision for us. My father was able to complete the therapy without losing any weight and with minimum side effects. My father could share anything and everything with him as one would share with a friend. And Dr. Neeraj patiently heard him and empathised with him - he briefed him on step by step process without hiding anything and at the same time maintaining his tough mental state. The way he supported and guided us in this tough journey is truly commendable and we cannot thank him enough for that. Our heartfelt gratitude 🙏
+      </p>
+      <div class="flex items-center space-x-2">
+       <!-- <img alt="Profile picture of Jessica, a female patient with short hair and a friendly smile" class="w-6 h-6 rounded-full object-cover" height="24" src="https://storage.googleapis.com/a1aa/image/d8f2658e-6a16-4813-3cb5-25b4cd5bd8ef.jpg" width="24"/> -->
+       <span class="text-[11px] font-normal text-[#0f3c4b]">
+        Piyush Sinha
+       </span>
+      </div>
+     </div>
+     <!-- Card 2 -->
+     <div class="border border-[#0f3c4b] rounded-md p-5">
+      <div class="flex items-center mb-3">
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+      </div>
+      <p class="text-[11px] leading-[15px] text-[#0f3c4b] mb-6">
+      My uncle was diagnosed with brain tumor for which he was operated 2 years ago. Now there was a recurrence and we were not ready for a repeat surgery. We were suggested radiotherapy. One of my friends suggested Dr Neeraj Dhingra at Ruby hall clinic. He was very patient and cleared all our details in one sitting. Stereotactic radiosurgery was performed on Cyberknife machine in 5 sittings expertly under his care. Our patient is doing well. We are very thankful to Dr Dhingra for his expert care. 
+      </p>
+      <div class="flex items-center space-x-2">
+       
+       <span class="text-[11px] font-normal text-[#0f3c4b]">
+        Vijay Nirgude
+       </span>
+      </div>
+     </div>
+     <!-- Card 3 -->
+     <div class="border border-[#0f3c4b] rounded-md p-5">
+      <div class="flex items-center mb-3">
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+      </div>
+      <p class="text-[11px] leading-[15px] text-[#0f3c4b] mb-6">
+       We recently underwent radiation therapy under Dr. Neeraj Dhingra's excellent treatment plan for my relative diagnosed with cancer. Dr. Neeraj is very knowledgeable, supportive and reachable doctor. My relative is cured now and in good health all thanks to the well planned procedure. He took into consideration overall well being of the patient and family and was empathetic throughout the treatment. I highly recommend Dr. Neeraj Dhingra as one of the best oncologist in Pune. Thank you sir for all your patience and genuine care. </p>
+      <div class="flex items-center space-x-2">
+       <!-- <img alt="Profile picture of Edwards, a male patient with short hair and glasses" class="w-6 h-6 rounded-full object-cover" height="24" src="https://storage.googleapis.com/a1aa/image/1ad06865-569a-4931-4c59-579fbd1b9133.jpg" width="24"/> -->
+       <span class="text-[11px] font-normal text-[#0f3c4b]">
+        Shreya Kharat
+       </span>
+      </div>
+     </div>
+     <!-- Card 4 -->
+     <div class="border border-[#0f3c4b] rounded-md p-5">
+      <div class="flex items-center mb-3">
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+       <i class="fas fa-star text-[#fbbf24] text-sm">
+       </i>
+      </div>
+      <p class="text-[11px] leading-[15px] text-[#0f3c4b] mb-6">
+       One of the best Docs in Pune, exhibits a very high order of professionalism and compassion. Treated My father suffering from Lung Cancer by Radiation Therapy with excellent results and no side effects. Doc is polite listens to patients carefully and provides correct tratment with max patient comfort. He is best recommended doctor in treating cancer . God bless him........ </p>
+      <div class="flex items-center space-x-2">
+       <span class="text-[11px] font-normal text-[#0f3c4b]">
+        Ajay Kumar
+       </span>
+      </div>
+     </div>
+    </div>
+   </section>
+   <!-- <section class="relative bg-[#2f3a3f]">
+    <img alt="Background image showing a close-up of a medical professional's hands wearing blue gloves assisting a patient" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover opacity-20" height="300" src="https://storage.googleapis.com/a1aa/image/f774009f-f4fe-44e8-684c-d81eb5c63422.jpg" width="1920"/>
+    <div class="relative max-w-7xl mx-auto px-6 sm:px-10 md:px-16 py-14 flex flex-col sm:flex-row sm:items-center sm:justify-between text-white">
+     <div class="mb-8 sm:mb-0 max-w-xs sm:max-w-none">
+      <h3 class="text-2xl font-bold leading-tight mb-2">
+       Need help?
+      </h3>
+      <p class="text-[10px] leading-4 max-w-[220px]">
+       Id sed suspendisse massa elit morbi odio justo vitae pharetra. Sed nullam sit est scelerisque tincidunt pellentesque felis.
+      </p>
+     </div>
+     <div class="flex flex-col sm:flex-row sm:space-x-10 text-[10px] font-normal">
+      <div class="mb-6 sm:mb-0">
+       <p class="mb-1">
+        For enquiries, please call
+       </p>
+       <p class="font-semibold text-sm leading-5">
+        (406) 555-0120
+       </p>
+      </div>
+      <div class="border-l border-white pl-6">
+       <p class="mb-1">
+        For appointments
+       </p>
+       <p class="font-semibold text-sm leading-5">
+        (406) 555-0120
+       </p>
+      </div>
+     </div>
+    </div>
+   </section> -->
+   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-16" id = "Media">
+    <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 text-center mb-8">
+        Media Coverage
+    </h2>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-5xl mx-auto">
+     <article class="border border-slate-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+      <img alt="news9 logo" class="rounded-md mb-4 w-full object-cover h-48" height="240" src="{%static 'news9.png' %}" width="400"/>
+      <h3 class="font-semibold text-slate-900 mb-1 text-sm sm:text-base">
+        Dr. Neeraj Dhingra
+      </h3>
+      <p class="text-xs sm:text-sm text-slate-600 mb-3 leading-relaxed">
+        After cancer diagnosis 50-year-old develops ‘Irish accent’, expert says happens when language area of brain is affected
+      <a class="text-blue-600 text-xs sm:text-sm font-medium flex items-center gap-1" href="https://www.news9live.com/health/health-conditions/after-cancer-diagnosis-50-year-old-develops-irish-accent-expert-says-happens-when-language-area-of-brain-is-affected-au2180-2059703" target="_blank" rel="noopener noreferrer">
+        Read More
+       <i class="fas fa-arrow-right text-[10px]">
+       </i>
+      </a>
+     </article>
+     <article class="border border-slate-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+        <img alt="first post logo" class="rounded-md mb-4 w-full object-cover h-48" height="240" src="{%static 'firstpost.png' %}" width="400"/>
+        <h3 class="font-semibold text-slate-900 mb-1 text-sm sm:text-base">
+            Dr. Neeraj Dhingra
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 mb-3 leading-relaxed">
+          Significance and burden of adolescent and young cancer in India
+        </p>
+        <a class="text-blue-600 text-xs sm:text-sm font-medium flex items-center gap-1" href="https://www.firstpost.com/opinion/significance-and-burden-of-adolescent-and-young-cancer-in-india-12156202.html" target="_blank" rel="noopener noreferrer">
+          Read More
+         <i class="fas fa-arrow-right text-[10px]">
+         </i>
+        </a>
+       </article>
+       <article class="border border-slate-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-300">
+        <img alt="Indian express logo" class="rounded-md mb-4 w-full object-cover h-48" height="240" src="{%static 'indianexpress.png' %}" width="400"/>
+        <h3 class="font-semibold text-slate-900 mb-1 text-sm sm:text-base">
+            Dr. Neeraj Dhingra
+        </h3>
+        <p class="text-xs sm:text-sm text-slate-600 mb-3 leading-relaxed">
+          After cancer diagnosis 50-year-old develops ‘Irish accent’, expert says happens when language area of brain is affected
+        </p>
+        <a class="text-blue-600 text-xs sm:text-sm font-medium flex items-center gap-1" href="https://indianexpress.com/article/lifestyle/health/50-year-old-uncontrollable-irish-accent-cancer-diagnosis-symptoms-treatment-8452454/"  target="_blank" rel="noopener noreferrer">
+            Read More
+         <i class="fas fa-arrow-right text-[10px]">
+         </i>
+        </a>
+       </article>
+    </div>
+</section>
+  {% include 'includes/footer.html' %}
+
+   <script src="{%static 'script.js' %}"></script>
+ </body>
+</html>

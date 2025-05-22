@@ -1,0 +1,485 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Breast Cancer</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+ <style>
+/* .scroll-container {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+} */
+    /* @keyframes appear{
+      from{
+        opacity: 0;
+        scale: 0.5;
+      }
+      to{
+        opacity: 1;
+        scale:1;
+      }
+    } */
+    .block{
+      animation: appear linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .zoom-in {
+      transition: transform 0.2s ease-in-out;
+    }
+    .zoom-in:hover {
+      transform: scale(1.1);
+    }
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+    .underline-line {
+      width: 24px;
+      height: 2px;
+      background-color: #0c4a6e;
+    }
+    .book-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.dialog {
+  position: fixed;
+  margin-top: -85px;
+  margin-left: 450px;
+  margin-bottom: 300px;
+  width: 450px;
+  height: 300px;
+  /* background-color: rgba(160, 19, 19, 0.5); */
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+
+.dialog.show {
+  display: flex; /* Make sure display: flex is active when shown */
+}
+
+.dialog-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+
+  /* Ensure all input fields are clearly visible */
+  input, textarea {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  /* Fix for incorrect "text-Black" class */
+  .text-Black {
+    color: #000000;
+  }
+  .close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+nav {
+    position: sticky; top: 0;
+    background-color: white;
+    z-index: 9999;
+}
+div.scrollmenu {
+            background-color: white;
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+div.scrollmenu a {
+            display: inline-block;
+            color: Black;
+            text-align: center;
+            padding: 14px;
+            text-decoration: none;
+        }
+
+
+  </style>
+</head>
+<body class = "bg-white">
+  <nav class="flex items-center justify-between px-10 py-4 max-w-7xl mx-auto">
+   <div class="flex items-center space-x-2">
+    <img alt="logo" class="w-50 h-10" height="80" src="{%static 'Logo.png'%}" width="90"/>
+   </div>
+   <ul class="hidden md:flex space-x-20 text-m text-gray-1200 font-normal">
+    <li>
+     <a class="hover:text-blue-600 transition zoom-in" href="{% url 'home' %}">
+      Home
+     </a>
+    </li>
+    <li class = "nav-item">
+     <a class="hover:text-blue-600  transition zoom-in"  href="{% url 'about' %}">
+      About Us
+     </a>
+    </li>
+    <li>
+     <a class="text-blue-600 transition font-semibold" href="#Specialities">
+      Specialities
+     </a>
+    </li>
+    <li>
+        <a class="hover:text-blue-600 transition" href="/#Media">
+         Media Coverage
+        </a>
+       </li>
+    <li>
+     <a class="hover:text-blue-600 transition" href="#Contact">
+      Contact Us
+     </a>
+    </li>
+   </ul>
+   <button class="book-btn hidden md:inline-block bg-blue-600 text-white text-s font-semibold px-4 py-2 rounded hover:bg-blue-900 transition" type="button">
+    Book Appointment
+   </button>
+  </nav>
+ <div id="dialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close">&times;</span>
+            <form class="w-full max-w-lg"  method="Post" id = "contactform">
+              {% csrf_token %}
+              <div class="mb-5">
+                <label for="name" class="block text-Black text-lg font-semibold mb-1">
+                  Name <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="name"
+                  name = "name"
+                  type="text"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="email" class="block text-Black text-lg font-semibold mb-1">
+                  Email <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="email"
+                  name = "email"
+                  type="email"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="phone" class=" text-Black text-lg font-semibold mb-1">
+                  Phone Number <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="phone"
+                  name = "phone"
+                  type="tel"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label for="message" class=" text-Black text-lg font-semibold mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name = "message"
+                  rows="4"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold resize-y"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white font-semibold text-lg py-3 rounded-md hover:bg-blue-900 transition"
+              >
+                Book Appointment
+              </button>
+            </form>
+             {% if form_submitted %}
+<script>
+  document.getElementById("contactform").reset();
+</script>
+{% endif %}
+        </div>
+    </div>
+  {% include 'includes/scrollMenu.html' %}
+
+     <section class="bg-[#f0fbff] py-14 px-6" id = "About" >
+    <div class="mx-auto text-center mb-10">
+     <h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+         Breast Cancer
+     </h2>
+     <div class="flex justify-center items-center my-4">
+  <img
+    alt="brain"
+    class="rounded-md w-full sm:w-[400px] object-cover"
+    height="400"
+    src="{%static 'breastcancer.jpg'%}"
+    width="400"
+  />
+</div>
+
+    </div>
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 px-2 sm:px-0">
+  <div class="text-justify max-w-xl">
+      <p class="block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+Breast cancer occurs when cells in the breast grow out of control and form a growth or
+tumor. Tumors may be cancerous (malignant) or not cancerous (benign). The risk of
+getting breast cancer has shown an increase over the years.
+Current statistics put breast cancer as the number 1 cancer in females with it
+constituting 15% of all new cases of cancer. According to estimates 12-13% of females
+will have breast cancer in their lifetime.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+         Risk Factors of getting Breast Cancer
+         <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+1. Older age is the main risk factor for most cancers.Breast cancer similarly is
+found mostly in middle age and old age females. Although males can also get
+breast cancers, the risk is quite low.
+<br>
+2. A personal history of invasive breast cancer , ductal carcinoma in situ (DCIS), or
+lobular carcinoma in situ (LCIS).
+<br>
+3. A family history of breast cancer in a first-degree relative (mother, daughter, or
+sister).
+<br>
+4. Inherited changes in the BRCA1 or BRCA2 genes or in other genes that increase
+the risk of breast cancer.
+<br>
+5. Breast tissue that is dense on a mammogram.
+<br>
+6. Exposure of breast tissue to estrogen made by the body. This may be caused by:
+<br>
+  a. Menstruating at an early age.
+  b. Older age at first birth or never having given birth.
+  c. Starting menopause at a later age.
+<br>
+7. Taking hormones such as estrogen combined with progestin for symptoms of
+menopause.
+<br>
+8. Treatment with radiation therapy to the breast/chest.
+<br>
+9. Drinking alcohol.
+<br>
+10. Obesity .
+
+<br>
+</p>
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Signs of Breast Cancer
+        <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+
+1. A lump or thickening in or near the breast or in the underarm area which is increasing in size.
+<br>
+2. A change in the size or shape of the breast.
+<br>
+3. A dimple or puckering in the skin of the breast.
+<br>
+4. A nipple turned inward into the breast.
+<br>
+5. Fluid, other than breast milk, from the nipple, especially if it's bloody.
+<br>
+6. Scaly, red, or swollen skin on the breast, nipple, or areola (the dark area of skin around the nipple).
+<br>
+7. Dimples in the breast that look like the skin of an orange, called peau d’orange .
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Diagnosing breast Cancer
+        <br>
+     </h2>
+
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+1. History taking and Medical examination including a Clinical Breast exam that will
+be done by a doctor.
+<br>
+2. Mammogram: This is an Xray of the breast to look for the suspicious lesion.
+<br>
+3. Ultrasonography: This is also to look for the lesion. It also helps to localize the
+lesion and to take biopsy from it.
+<br>
+4. MRI: An MRI of the breast can also be advised by your oncologist in certain
+indications.
+<br>
+5. Biopsy: A procedure in which tissue is taken from the lump to confirm that it is
+cancerous. After confirmation, certain tests will be run on it like Estrogen &
+Progesterone receptor ( ER/PR) test, Her2Neu Test, and other multigene panels.
+<br>
+6. PET CT scan: It is a whole body scan and is usually advised in higher stages of
+cancer to look for the spread of the disease.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Breast Cancer Prevention
+        <br>
+     </h2>
+     <p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+Cancer prevention is action taken to lower the chance of getting cancer. Some risk
+factors for cancer can be avoided, but many cannot. Some preventive measures to
+reduce the occurrence of breast cancer include:
+<br>
+1. Decreasing exposure of estrogen to breast tissue: Younger age of pregnancy has
+been found to be protective against breast cancer in a study. Also, Women who
+breastfed have a lower risk of breast cancer than women who have had children
+but did not breastfeed.
+<br>
+2. Risk-reducing or prophylactic mastectomy-Some women who have a high risk of
+breast cancer may choose to have a risk-reducing or prophylactic mastectomy
+(the removal of one or both breasts when there are no signs of cancer). After
+surgery, the risk of breast cancer becomes much lower in these women.
+However, it is very important to have a cancer risk assessment and counseling
+about the different ways to prevent breast cancer before making any decision
+about surgery.
+<br>
+3. Ovarian Ablation: The ovaries make most of the estrogen that is made by the
+body. Treatments that stop or lower the amount of estrogen made by the ovaries
+include surgery to remove the ovaries, radiation therapy, or taking certain drugs.
+This is called ovarian ablation .
+<br>
+4. Women who take part in physical exercise have a lower risk of breast cancer.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Breast Cancer Screening
+        <br>
+     </h2>
+     <p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+Screening is looking for signs of disease, such as breast cancer , before a person has
+symptoms . The goal of screening tests is to find cancer at an early stage when it can be
+treated and may be cured .Screening tests are done when you have no cancer
+symptoms. Women who have a strong family history or a personal history of cancer or
+other risk factors may also be offered genetic testing .
+<br>
+Various methods which are offered are:
+<br>
+1. Mammography is the most common screening test for breast cancer.
+International guidelines suggest that women after the age of 50 should undergo
+once yearly mammograms to detect any asymptomatic breast cancers.
+<br>
+2. Women with risk factors for breast cancer, such as certain changes in the BRCA1
+or BRCA2 gene or certain genetic syndromes may be screened at a younger age
+and more often.
+<br>
+3. MRI may be used as a screening test for women who have a high risk of breast
+cancer.
+<br>
+4. Breast examination: Breast self-exams may be done by women or men to check
+their breasts for lumps or other changes. If you feel any lumps or notice any other
+changes in your breasts, talk to your doctor.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Treatment of Breast Cancer
+        <br>
+     </h2>
+
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+Treatment of breast cancer is multidisciplinary and requires help of Breast/Onco
+surgeon, Medical oncologist, Radiation Oncologist, Geneticist, Radiologists, etc.
+<br>
+The following types of treatment are used:
+<br>
+1. Surgery<br>
+2. Radiation therapy<br>
+3. Chemotherapy<br>
+4. Hormone therapy<br>
+5. Targeted therapy<br>
+6. Immunotherapy
+<br>
+      </p>
+
+      <h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Radiation Therapy for Breast Cancer
+        <br>
+     </h2>
+
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+Radiation Therapy in Breast cancer is mostly utilised in a postoperative setting. This is
+given to the postoperative breast or chest wall along with draining nodal regions. The
+aim of the treatment is to prevent local recurrences. The various protocols for
+administering radiation to breast are:
+<br>
+1. Conventional fractionation: The standard dose of 1.8-2Gy is delivered daily and
+the entire treatment duration is around 5-6 weeks.
+<br>
+2. Hypofractionation : Slightly higher doses than the conventional method are
+delivered daily. The advantage of this is the reduced overall treatment time of 3-4
+weeks. This is the standard treatment protocol across institutes now.
+<br>
+3. Extremely Hypofractionated ( Fast Forward Approach)- Newer trials have studied
+the delivery of treatment in 1-2 weeks by giving high doses per day. These
+studies in international centers have delivered equivalent results with respect to
+tumor control rates and adverse event profile. However the protocol has limited
+indications and needs to be discussed with the treating radiation oncologist
+before starting treatment.
+<br>
+4. Accelerated Partial Breast Irradiation (APBI) – In cases where the tumor size is
+upto 2-3 cms and no nodal burden only the tumor bed can be given radiation
+instead of the whole breast. This treatment protocol is finished in 1-2 weeks and
+can be done in indicated cases after discussing with your radiation oncologist.
+<br>
+      </p>
+     </div>
+    </div>
+   </section>
+
+   {% include 'includes/footer.html' %}
+
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

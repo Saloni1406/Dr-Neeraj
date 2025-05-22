@@ -1,0 +1,456 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brain Tumor</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+ <style>
+/* .scroll-container {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+} */
+    /* @keyframes appear{
+      from{
+        opacity: 0;
+        scale: 0.5;
+      }
+      to{
+        opacity: 1;
+        scale:1;
+      }
+    } */
+    .block{
+      animation: appear linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .zoom-in {
+      transition: transform 0.2s ease-in-out;
+    }
+    .zoom-in:hover {
+      transform: scale(1.1);
+    }
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+    .underline-line {
+      width: 24px;
+      height: 2px;
+      background-color: #0c4a6e;
+    }
+    .book-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.dialog {
+  position: fixed;
+  margin-top: -85px;
+  margin-left: 450px;
+  margin-bottom: 300px;
+  width: 450px;
+  height: 300px;
+  /* background-color: rgba(160, 19, 19, 0.5); */
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+
+.dialog.show {
+  display: flex; /* Make sure display: flex is active when shown */
+}
+
+.dialog-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+
+  /* Ensure all input fields are clearly visible */
+  input, textarea {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  /* Fix for incorrect "text-Black" class */
+  .text-Black {
+    color: #000000;
+  }
+  .close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+nav {
+    position: sticky; top: 0;
+    background-color: white;
+    z-index: 9999;
+}
+div.scrollmenu {
+            background-color: white;
+            overflow: auto;
+            white-space: nowrap;
+        }
+
+div.scrollmenu a {
+            display: inline-block;
+            color: Black;
+            text-align: center;
+            padding: 14px;
+            text-decoration: none;
+        }
+
+
+  </style>
+</head>
+<body class = "bg-white">
+  <nav class="flex items-center justify-between px-10 py-4 max-w-7xl mx-auto">
+   <div class="flex items-center space-x-2">
+    <img alt="logo" class="w-50 h-10" height="80" src="{%static 'Logo.png'%}" width="90"/>
+   </div>
+   <ul class="hidden md:flex space-x-20 text-m text-gray-1200 font-normal">
+    <li>
+     <a class="hover:text-blue-600 transition zoom-in" href="{% url 'home' %}">
+      Home
+     </a>
+    </li>
+    <li class = "nav-item">
+     <a class="hover:text-blue-600 transition zoom-in"  href="{% url 'about' %}">
+      About Us
+     </a>
+    </li>
+    <li>
+     <a class="text-blue-600 transition font-semibold" href="#Specialities">
+      Specialities
+     </a>
+    </li>
+    <li>
+        <a class="hover:text-blue-600 transition" href="#Media">
+         Media Coverage
+        </a>
+       </li>
+    <li>
+     <a class="hover:text-blue-600 transition" href="#Contact">
+      Contact Us
+     </a>
+    </li>
+   </ul>
+   <button class="book-btn hidden md:inline-block bg-blue-600 text-white text-s font-semibold px-4 py-2 rounded hover:bg-blue-900 transition" type="button">
+    Book Appointment
+   </button>
+  </nav>
+<div id="dialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close">&times;</span>
+            {% if errors %}
+    <div class="text-red-600 font-semibold mb-4">
+      <ul>
+        {% for error in errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+            <form class="w-full max-w-lg"  method="Post" id = "contactform">
+              {% csrf_token %}
+              <div class="mb-5">
+                <label for="name" class="block text-Black text-lg font-semibold mb-1">
+                  Name <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="name"
+                  name = "name"
+                  type="text"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="email" class="block text-Black text-lg font-semibold mb-1">
+                  Email <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="email"
+                  name = "email"
+                  type="email"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="phone" class=" text-Black text-lg font-semibold mb-1">
+                  Phone Number <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="phone"
+                  name = "phone"
+                  type="tel"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label for="message" class=" text-Black text-lg font-semibold mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name = "message"
+                  rows="4"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold resize-y"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white font-semibold text-lg py-3 rounded-md hover:bg-blue-900 transition"
+              >
+                Book Appointment
+              </button>
+            </form>
+             {% if form_submitted %}
+<script>
+  document.getElementById("contactform").reset();
+</script>
+{% endif %}
+        </div>
+    </div>
+    {% include 'includes/scrollMenu.html' %}
+
+
+     <section class="bg-[#f0fbff] py-14 px-6" id = "About" >
+    <div class="mx-auto text-center mb-10">
+     <h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+         Brain Tumour
+     </h2>
+     <div class="flex justify-center items-center my-4">
+  <img
+    alt="brain"
+    class="rounded-md w-full sm:w-[400px] object-cover"
+    height="400"
+    src="{% static 'braintumour.jpg' %}"
+    width="400"
+  />
+</div>
+
+    </div>
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-12 px-2 sm:px-0">
+  <div class="text-justify max-w-xl">
+      <p class="block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+The brain controls many important body functions. The spinal cord connects the brain
+to nerves in most parts of the body. There are many types of tumors that can originate
+from various tissues of the brain and spinal cord. Some examples are: Astrocytomas,
+Oligodendrogliomas, Meningioma, Pineal tumors, Craniopharyngioma, Acoustic
+Schwanomma, etc.
+
+Similarly many times many tumors from other parts of the body can spread to the
+brain. These are called metastases.Metastatic brain tumors are more common than
+primary brain tumors.The most common organs from which cancers spread to brain
+are: Lung, Breast, Kidney, Melanoma, Colon, etc.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+         Brain Tumour Symptoms
+         <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+1. Morning headache or headache that goes away after vomiting .
+<br>
+2. Seizures .
+<br>
+3. Vision, hearing, and speech problems.
+<br>
+4. Loss of appetite .
+<br>
+5. Frequent nausea and vomiting.
+<br>
+6. Changes in personality, mood, ability to focus, or behavior.
+<br>
+7. Loss of balance and trouble walking.
+<br>
+8. Weakness.
+<br>
+9. Unusual sleepiness or change in activity level.
+<br>
+10. Spinal Cord Tumor Symptoms
+<br>
+11. Back pain or pain that spreads from the back towards the arms or legs.
+<br>
+12. A change in bowel habits or trouble urinating .
+<br>
+13. Weakness or numbness in the arms or legs.
+<br>
+14. Trouble walking.
+<br>
+15. Frequent nausea and vomiting.
+<br>
+</p>
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Diagnosing a Brain Tumor
+        <br>
+     </h2>
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+1. Physical examination includes a complete neurological examination, Eye
+checkup, or hearing tests.
+<br>
+2. Imaging of brain: Can be done by a CT scan, MRI Scan or some specific PET
+scans also
+<br>
+3. Biopsy : Tissue diagnosis is required to classify and grade the tumor.This can be
+via a stereotactic biopsy or an open surgery. This is performed by a
+neurosurgeon.
+<br>
+4. Histopathology: After examining the tissue under a microscope certain tests
+might need to be done to further classify and prognosticate the tumor. These
+tests are Immunohistochemistry (IHC) & Cytogenetic studies to assess genetic
+mutations.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Treatment Overview
+        <br>
+     </h2>
+
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+There are different types of treatment for patients with adult brain and spinal
+cord tumors. These are:
+<br>
+Surgery: Usually the first choice treatment. Required for decompression, biopsy or maximal removal of tumor.
+<br>
+Radiation Therapy: Radiation therapy is a cancer treatment that uses high-energy x-rays or other types of radiation to kill cancer cells or keep them from growing. External radiation therapy uses a machine outside the body to send radiation toward the area of the body with cancer. There are various techniques of delivering precise radiation beams to the tumor. These include: Conformal RT, IMRT, IGRT, and Sterotactic Radiosurgery.
+<br>
+Chemotherapy:Cancer treatment that uses drugs to stop the growth of cancer cells.
+best oncologist in PCMC and Pune.
+<br>
+</p>
+ <div class="flex justify-center items-center my-4">
+  <img
+    alt="brain"
+    class="rounded-md w-full sm:w-[400px] object-cover"
+    height="400"
+    src="{% static 'Braintumour2.png' %}"
+    width="400"
+  />
+</div>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Treatment of Metastatic Brain tumors:
+        <br>
+     </h2>
+     <p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+Treatment of tumors that have spread to the brain from another part of the body may
+include the following:
+<br>
+Radiation therapy to the whole brain with or without surgery.
+Radiation therapy to the whole brain with or without stereotactic radiosurgery.
+Stereotactic radiosurgery.
+Chemotherapy , if the primary tumor is one that responds to anticancer drugs. It may be combined with radiation therapy.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Stereotactic Radiosurgery
+        <br>
+     </h2>
+     <p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      <br>
+Stereotactic radiosurgery (SRS) uses many precisely focused radiation beams to treat
+tumors and other problems in the brain, neck, lungs, liver, spine and other parts of the
+body.
+It is not surgery in the traditional sense because there’s no incision. Instead, stereotactic
+radiosurgery uses 3D imaging to target high doses of radiation to the affected area with
+minimal impact on the surrounding healthy tissue.
+Like other forms of radiation, stereotactic radiosurgery works by damaging the DNA of
+the targeted cells.
+Stereotactic radiosurgery of the brain and spine is typically completed in a single
+session. Body radiosurgery is used to treat lung, liver, adrenal and other soft tissue
+tumors, and treatment typically involves multiple (three to five) sessions.
+<br>
+Different types of technology can be utilised to deliver the SRS treatments:
+<br>
+1. Linear accelerators(LINAC): These machines utilise highly conformal photon
+beams to target the tumor. LINAC machines are also known by the brand name
+of the manufacturer, such as CyberKnife and TrueBeam.
+<br>
+2. Gamma Knife machines use 192 or 201 small beams of gamma rays to target
+and treat cancerous and noncancerous brain abnormalities.
+<br>
+3. Proton beam therapy (charged particle radiosurgery) is the newest type of
+stereotactic radiosurgery and is available in only a few centers across the globe.
+<br>
+</p>
+
+<h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+  <br>
+        Indication Of SRS
+        <br>
+     </h2>
+
+<p class = "block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+  <br>
+Around 50 years ago, stereotactic radiosurgery was pioneered as a less invasive and
+safer alternative to standard brain surgery (neurosurgery),Since then, the use of
+stereotactic radiosurgery has expanded widely to treat a variety of neurological and
+other conditions, including:
+<br>
+1. Malignant brain tumors including brain metastasis, Recurrent primary brain
+tumors like gliomas.
+<br>
+2. Benign Brain tumors like Meningiomas, Acoustic Schwannomas, Pituitary
+adenomas, Craniopharyngiomas, Arteriovenous Malformations (AVM),Skull base
+tumors like Chordomas, Paragangliomas. Although these tumors are not
+malignant they have a tendency to recur after primary surgery and hence may
+need treatment in upfront or recurrent settings.
+<br>
+3. Functional radiosurgery indications: These are not directed at a particular tumor
+but delivering high doses of radiation brings relief from the particular
+condition.Examples are Trigeminal neuralgia, Recurrent seizure disorder, tremors
+associated with certain disease like Parkinson’s and essential tremor.
+<br>
+      </p>
+     </div>
+    </div>
+   </section>
+   {% include 'includes/footer.html' %}
+
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>

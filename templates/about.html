@@ -1,0 +1,280 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Page</title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+ <style>
+/* .scroll-container {
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  overflow-y: auto;
+} */
+    /* @keyframes appear{
+      from{
+        opacity: 0;
+        scale: 0.5;
+      }
+      to{
+        opacity: 1;
+        scale:1;
+      }
+    } */
+    .block{
+      animation: appear linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
+    .zoom-in {
+      transition: transform 0.2s ease-in-out;
+    }
+    .zoom-in:hover {
+      transform: scale(1.1);
+    }
+   body {
+      font-family: 'Inter', sans-serif;
+    }
+    .underline-line {
+      width: 24px;
+      height: 2px;
+      background-color: #0c4a6e;
+    }
+    .book-btn {
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.dialog {
+  position: fixed;
+  margin-top: -85px;
+  margin-left: 450px;
+  margin-bottom: 300px;
+  width: 450px;
+  height: 300px;
+  /* background-color: rgba(160, 19, 19, 0.5); */
+  display: none; /* Hidden by default */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+
+
+.dialog.show {
+  display: flex; /* Make sure display: flex is active when shown */
+}
+
+.dialog-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+
+  .close {
+    position: absolute;
+    top: 1rem;
+    right: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+  }
+
+  /* Ensure all input fields are clearly visible */
+  input, textarea {
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+
+  /* Fix for incorrect "text-Black" class */
+  .text-Black {
+    color: #000000;
+  }
+  .close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+nav {
+    position: sticky; top: 0;
+    background-color: white;
+    z-index: 9999;
+}
+  </style>
+</head>
+<body class = "bg-white">
+  <nav class="flex items-center justify-between px-10 py-4 max-w-7xl mx-auto">
+   <div class="flex items-center space-x-2">
+    <img alt="logo" class="w-50 h-10" height="80" src="{%static 'Logo.png' %}" width="90"/>
+   </div>
+   <ul class="hidden md:flex space-x-20 text-m text-gray-1200 font-normal">
+    <li>
+     <a class="hover:text-blue-600 transition zoom-in" href="{% url 'home' %}">
+      Home
+     </a>
+    </li>
+    <li class = "nav-item">
+     <a class="text-blue-600 font-semibold transition zoom-in"  href="{% url 'about' %}">
+      About Us
+     </a>
+    </li>
+    <li>
+     <a class="hover:text-blue-600 transition" href="{% url 'brain' %}">
+      Specialities
+     </a>
+    </li>
+    <li>
+        <a class="hover:text-blue-600 transition" href="/#Media">
+         Media Coverage
+        </a>
+       </li>
+    <li>
+     <a class="hover:text-blue-600 transition" href="#Contact">
+      Contact Us
+     </a>
+    </li>
+   </ul>
+   <button class="book-btn hidden md:inline-block bg-blue-600 text-white text-s font-semibold px-4 py-2 rounded hover:bg-blue-900 transition" type="button">
+    Book Appointment
+   </button>
+  </nav>
+  <div id="dialog" class="dialog">
+        <div class="dialog-content">
+            <span class="close">&times;</span>
+            <form class="w-full max-w-lg"  method="Post" id = "contactform">
+              {% csrf_token %}
+              <div class="mb-5">
+                <label for="name" class="block text-Black text-lg font-semibold mb-1">
+                  Name <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="name"
+                  name = "name"
+                  type="text"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="email" class="block text-Black text-lg font-semibold mb-1">
+                  Email <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="email"
+                  name = "email"
+                  type="email"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-5">
+                <label for="phone" class=" text-Black text-lg font-semibold mb-1">
+                  Phone Number <span class="text-[#E91E63]">*</span>
+                </label>
+                <input
+                  id="phone"
+                  name = "phone"
+                  type="tel"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold"
+                  required
+                />
+              </div>
+              <div class="mb-6">
+                <label for="message" class=" text-Black text-lg font-semibold mb-1">
+                  Message
+                </label>
+                <textarea
+                  id="message"
+                  name = "message"
+                  rows="4"
+                  class="w-full rounded-md py-3 px-4 text-lg font-semibold resize-y"
+                ></textarea>
+              </div>
+              <button
+                type="submit"
+                class="w-full bg-blue-600 text-white font-semibold text-lg py-3 rounded-md hover:bg-blue-900 transition"
+              >
+                Book Appointment
+              </button>
+            </form>
+             {% if form_submitted %}
+<script>
+  document.getElementById("contactform").reset();
+</script>
+{% endif %}
+        </div>
+    </div>
+
+   <section class="bg-[#f0fbff] py-14 px-6" id = "About" >
+    <div class="mx-auto text-center mb-10">
+     <p class="text-xs text-slate-500 uppercase tracking-widest mb-2">
+      About Dr. Neeraj Dhingra
+     </p>
+     <h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+        Dr. Neeraj Dhingra: Consultant - CyberKnife RadioSurgery and Radiation Oncology
+     </h2>
+    </div>
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-start gap-8 sm:gap-12 px-2 sm:px-0">
+     <img alt="image" class="rounded-md w-full sm:w-[400px] object-cover" height="400" src="{%static 'Untitled_design-removebg-preview.png' %}" width="400"/>
+     <div class="text-justify max-w-xl">
+      <p class="block font-light text-slate-900 text-xs sm:text-sm leading-snug mb-2">
+      Dr. Neeraj Dhingra – Trusted Oncologist in PCMC and Pune
+      Dr. Neeraj Dhingra is a highly respected oncologist in the PCMC and Pune region, known for his expertise, compassionate care, and commitment to cutting-edge cancer treatment. With qualifications including MBBS, MD, DNB, and DHM, he brings a strong academic background and years of clinical experience to his role.
+      He currently serves as a Consultant in CyberKnife Radiosurgery and Radiation Oncology at Ruby Hall Clinic, one of Pune’s premier hospitals. Dr. Dhingra specializes in treating complex cancer cases using advanced radiotherapy technologies such as IMRT, IGRT, VMAT, and SRS/SBRT, and is particularly skilled in using the CyberKnife system for highly precise, non-invasive tumor treatments.
+      His ability to personalize treatment plans based on each patient’s condition ensures better outcomes and enhanced quality of life. Dr. Dhingra is committed to staying at the forefront of oncology and continually integrates the latest medical advancements into his practice.
+      In addition to his clinical work, Dr. Dhingra is actively involved in academic research and has published numerous papers in national and international journals. He is also a member of the Association of Radiation Oncologists of India (AROI) and other professional bodies, ensuring his knowledge stays aligned with global standards.
+      His key areas of interest include brain, head and neck, thoracic, and genitourinary cancers, with a focus on stereotactic treatments. Dr. Dhingra’s dedication to precision medicine and patient-centric care makes him a trusted name in oncology, drawing patients from across Maharashtra and beyond. 
+</p>
+     </div>
+    </div>
+   </section>
+
+
+   <section class="bg-[#f0fbff] py-14 px-6" id="About">
+  <!-- <div class="mx-auto text-center mb-10"> -->
+    <div class="mx-auto text-center mb-10">
+     <h2 class="text-slate-900 font-extrabold text-xl sm:text-2xl max-w-3xl mx-auto leading-tight">
+        Dr. Neeraj Dhingra - Cancer Specialist in Pune
+     </h2>
+    </div>
+
+    <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-start gap-8 sm:gap-12 px-2 sm:px-0">
+      <!-- Left: Text content -->
+      <div class="flex-1">
+        <p class="text-slate-900 text-xs sm:text-sm font-light text-justify leading-relaxed">
+          Dr. Neeraj Dhingra is a highly qualified and professionally accomplished cancer specialist based in Pune, with over 15 years of rich clinical experience. Throughout his career, he has worked with several leading hospitals across India, including renowned institutions in Mumbai, New Delhi, and Pune, where he has earned a strong reputation for clinical excellence and compassionate care.
+          <br><br>
+          He completed his super-specialization in Radiation Oncology (DNB) from the prestigious Batra Hospital, South Delhi, gaining advanced training in the latest radiotherapy techniques and cancer treatment protocols. Prior to that, he earned an MD in Preventive and Social Medicine from one of India’s top medical institutions, Seth G.S. Medical College and KEM Hospital, Mumbai, where he was recognized for his academic excellence.
+          <br><br>
+          Dr. Dhingra has also contributed to medical education by serving as an Assistant Professor at B.J. Medical College and Sassoon General Hospitals, Pune, where he played a pivotal role in training medical students and young clinicians. To further enhance his leadership and administrative capabilities in the healthcare sector, he obtained a Diploma in Hospital Management from the National Institute of Health and Family Welfare (NIHFW) in New Delhi.
+          <br><br>
+          His multidisciplinary background, combined with hands-on clinical expertise and a deep understanding of public health and hospital systems, makes Dr. Neeraj Dhingra a sought-after name in cancer care. His commitment to continual learning, patient-centered treatment, and excellence in oncology continues to positively impact the lives of cancer patients in Pune and beyond.
+        </p>
+      </div>
+
+      <!-- Right: Image -->
+      <div class="flex-shrink-0 w-full sm:w-[40%]">
+        <img src="{%static 'Certificate.jpg' %}" alt="certificate" class="rounded-md w-full sm:w-[400px] object-cover" width="600" height="600">
+      </div>
+
+    </div>
+  </div>
+</section>
+{% include 'includes/footer.html' %}
+
+<script src="{% static 'script.js' %}"></script>
+</body>
+</html>
