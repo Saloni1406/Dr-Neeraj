@@ -15,10 +15,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('DJANGO_SECRET_KEY', default='fallback-insecure-key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-#ALLOWED_HOSTS = ["dr-neeraj.onrender.com"]
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["dr-neeraj.onrender.com"]
+#ALLOWED_HOSTS = []
 
 # Application definition
 
