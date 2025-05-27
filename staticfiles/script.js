@@ -25,3 +25,10 @@ window.onclick = function(event) {
         dialog.style.display = "none";
     }
 };
+const toggleBtn = document.getElementById('nav-toggle');
+  const navLinks = document.getElementById('nav-links');
+
+  toggleBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('hidden');
+    navLinks.classList.toggle('flex');
+  });
