@@ -131,41 +131,7 @@ div.scrollmenu a {
   </style>
 </head>
 <body class = "bg-white">
-  <nav class="flex items-center justify-between px-10 py-4 max-w-7xl mx-auto">
-   <div class="flex items-center space-x-2">
-    <img alt="logo" class="w-50 h-10" height="80" src="{%static 'Logo.png'%}" width="90"/>
-   </div>
-   <ul class="hidden md:flex space-x-20 text-m text-gray-1200 font-normal">
-    <li>
-     <a class="hover:text-blue-600 transition zoom-in" href="{% url 'home' %}">
-      Home
-     </a>
-    </li>
-    <li class = "nav-item">
-     <a class="hover:text-blue-600 transition zoom-in"  href="{% url 'about' %}">
-      About Us
-     </a>
-    </li>
-    <li>
-     <a class="text-blue-600 transition font-semibold" href="#Specialities">
-      Specialities
-     </a>
-    </li>
-    <li>
-        <a class="hover:text-blue-600 transition" href="/#Media">
-         Media Coverage
-        </a>
-       </li>
-    <li>
-     <a class="hover:text-blue-600 transition" href="#Contact">
-      Contact Us
-     </a>
-    </li>
-   </ul>
-   <button class="book-btn hidden md:inline-block bg-blue-600 text-white text-s font-semibold px-4 py-2 rounded hover:bg-blue-900 transition" type="button">
-    Book Appointment
-   </button>
-  </nav>
+  {% include 'includes/nav.html' %}
  <div id="dialog" class="dialog">
         <div class="dialog-content">
             <span class="close">&times;</span>
